@@ -1,4 +1,5 @@
 bun.lockb
 datas.db
 tsconfig.json
+./node_modules
 package-lock.json
