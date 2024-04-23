@@ -1,0 +1,14 @@
+testMessage: 'salut'
+
+# Mod
+banMessage: '#length membres ont été bannis avec succès'
+kickMessage: '#length membres ont été expulsés avec succès'
+warnMessage: '#member.username a été averti avec succès'
+clearSanctionsMessage: '#length sanctions supprimées'
+deleteSanctionMessage: 'sanction #warnID supprimée avec succès'
+
+banDefaultReason: 'Ban : Aucune raison spécifiée'
+kickDefaultReason: 'Expulsion : Aucune raison spécifiée'
+warnDefaultReason: 'Avertissement : Aucune raison spécifiée'
+
+setStarBoardsChannel: 'Le salon des StarBoards est désormais #channel'

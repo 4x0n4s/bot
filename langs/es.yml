@@ -1,0 +1,14 @@
+testMessage: 'hola'
+
+# Mod
+banMessage: '#length miembros han sido baneados con éxito'
+kickMessage: '#length miembros han sido expulsados con éxito'
+warnMessage: '#member.username ha sido advertido con éxito'
+clearSanctionsMessage: '#length sanciones eliminadas'
+deleteSanctionMessage: 'sanción #warnID eliminada con éxito'
+
+banDefaultReason: 'Ban: Sin razón especificada'
+kickDefaultReason: 'Expulsión: Sin razón especificada'
+warnDefaultReason: 'Advertencia: Sin razón especificada'
+
+setStarBoardsChannel: 'El canal de visualización de StarBoards ahora es #channel'

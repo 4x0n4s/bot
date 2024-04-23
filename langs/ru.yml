@@ -1,0 +1,14 @@
+testMessage: 'привет'
+
+# Mod
+banMessage: '#length участников успешно забанены'
+kickMessage: '#length участников успешно исключены'
+warnMessage: '#member.username успешно предупрежден'
+clearSanctionsMessage: '#length санкций удалены'
+deleteSanctionMessage: 'санкция #warnID успешно удалена'
+
+banDefaultReason: 'Бан: Не указана причина'
+kickDefaultReason: 'Исключение: Не указана причина'
+warnDefaultReason: 'Предупреждение: Не указана причина'
+
+setStarBoardsChannel: 'Канал отображения StarBoards теперь #channel'
