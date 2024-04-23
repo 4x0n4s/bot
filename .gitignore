@@ -1,4 +1,4 @@
 bun.lockb
 datas.db
 tsconfig.json
-./assets
+package-lock.json
