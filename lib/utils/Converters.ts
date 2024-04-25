@@ -10,17 +10,11 @@ export function parseUsers(message: Message, IDs: string[]) {
     let clientUsers = client?.users.cache;
     if(!clientUsers) return [];
 
-    IDs.map(ID => clientUsers.get(ID)),
-    message.mentions.users.map(any => any),
-    clientUsers.filter(any => IDs.includes(any.username)).map(any => any),
-    message.mentions.repliedUser
-
     return [...new Set([
-        ...IDs.map(ID => clientUsers.get(ID)) as User[],
+        ...[...new Set(IDs)].map(ID => clientUsers.get(ID)).filter(Boolean),
         ...message.mentions.users.map(any => any),
-        ...clientUsers.filter(any => IDs.includes(any.username)).map(any => any),
-        message.mentions.repliedUser
-    ] as User[])];
+        ...clientUsers.filter(any => IDs.includes(any.username)).map(any => any)
+    ])] as User[];
 }
 
 export function parseRoles(message: Message, IDs: string[]) {
@@ -48,7 +42,7 @@ export function parseChannels(message: Message, IDs: string[]) {
 }
 
 export function getUsers(usersIDs: string[]) {
-    return usersIDs.filter(userID => RegExps.UserRegex.exec(userID)?.[1]);
+    return usersIDs.filter(userID => RegExps.UserRegex.exec(userID)?.[1]).map(userID => userID);
 }
 
 export function getRoles(rolesIDs: string[]) {
@@ -56,7 +50,7 @@ export function getRoles(rolesIDs: string[]) {
 }
 
 export function getChannels(channelsIDs: string[]) {
-    return channelsIDs.filter(channelID => RegExps.ChannelRegex.exec(channelID)?.[1]);
+    return channelsIDs.filter(channelID => RegExps.ChannelRegex.exec(channelID)?.[0]);
 }
 
 export function getBoolean(input: string) {

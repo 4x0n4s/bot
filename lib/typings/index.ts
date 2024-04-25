@@ -30,6 +30,7 @@ export type CommandArgumentsData = {
 }
 
 export type CommandArgumentsTypesData = typeof CommandArgumentsTypes 
+    | 'any'
     | 'string'
     | 'boolean' 
     | 'number' 

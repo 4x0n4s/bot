@@ -15,7 +15,7 @@ export default class {
     async test(message: Message, args: {
         m: User
     }) {
-        console.log(args.m.username)
+        console.log('0' + args.m)
         message.reply('test');
     }
 }   
