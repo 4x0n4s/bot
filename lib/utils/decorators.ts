@@ -10,8 +10,11 @@ export function Command (command: CommandConstructorOptions) {
 
 export function Event (name: keyof Events) {
     return function(target: any, key: string, descriptor: PropertyDescriptor) {
-       global.Main.handlersManager.registerEvents([
-            { name, exec: descriptor.value.bind(target) as Function }
-        ])
+        global.Main.on(
+            String(name), 
+            async (...args) => {
+                await descriptor.value.bind(...args)
+            }
+        );
     }
 }

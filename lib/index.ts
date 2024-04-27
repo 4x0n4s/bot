@@ -1,9 +1,7 @@
-import Bot from '@lib/structures/Bot';
-import DatabaseClient from '@lib/structures/Database';
-import Storage from '@lib/Storage';
+import Bot from '@lib/Bot';
+import Storage from '@lib/utils/Storage';
 
 export { 
     Bot, 
-    DatabaseClient,
     Storage
 }

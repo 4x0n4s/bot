@@ -3,7 +3,9 @@ import 'module-alias/register';
 
 let env = dotEnvExtended.load()
 
-import { Bot, DatabaseClient } from '@lib/index';
+import { Bot } from '@lib/index';
+import DatabaseClient from './Database';
+import Gateway from './ws/WebSocket';
 
 global.Main = new Bot({
     dev: env.MODE,
@@ -12,3 +14,4 @@ global.Main = new Bot({
 });
 
 global.databaseClient = new DatabaseClient();
+global.gateway = new Gateway();

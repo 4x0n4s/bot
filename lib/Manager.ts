@@ -1,17 +1,13 @@
 import type { Command, Event, Events} from '@typings';
-import type Bot from '@lib/structures/Bot';
+import type Bot from '@lib/Bot';
 import * as fs from 'fs-extra';
 import Emitter from 'events';
-import Storage from '@lib/Storage';
+import Storage from '@lib/utils/Storage';
 
 export default class Manager extends Emitter {
     commands = new Storage<string, Command>;
-    events = new Storage<keyof Events, Function>;
     constructor (private bot: Bot) {
         super();
-        bot.on('messageCreate', async (message) => {
-            
-        })
     }
     
     getCommands() {
@@ -28,19 +24,6 @@ export default class Manager extends Emitter {
     registerCommands(c: Command[]) {
         c.forEach(c => this.commands.set(c.name, c));
         return [...this.commands];   
-    }
-
-    registerEvents(e: Event[]) {
-        e.forEach(e => {
-            this.events.set(e.name, e.exec);
-            this.bot.on(
-                String(e.name), 
-                async (...args) => {
-                    await e.exec(...args)
-                }
-            );  
-        });
-        return [...this.events];
     }
 
     async load() {
