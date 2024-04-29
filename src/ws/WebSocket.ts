@@ -7,10 +7,11 @@ export default class extends WebSocket {
         super('ws://localhost:1337');
         super.on('open', () => {
             console.log('[WebSocket]: Gateway..')
-        });
-        super.on('message', async (message: string) => {
+        }).on('message', async (message: string) => {
             message = message.toString();
             console.log(message);
-        })
+        }).on('close', (cde) => {
+            
+        });
     }
 }
