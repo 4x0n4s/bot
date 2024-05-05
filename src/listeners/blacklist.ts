@@ -1,6 +1,6 @@
 import type { GuildBan } from 'discord.js';
 import type { BlackListData } from '@typings';
-import { Event } from '@decorators';
+import { Event } from '@lib/functions/decorators';
 
 export default class {
     @Event('guildBanRemove')
@@ -20,8 +20,7 @@ export default class {
 
      getBlacklist(): BlackListData[] {
         const query = databaseClient.query(`
-            SELECT userID
-            FROM blacklist
+            SELECT userID FROM blacklist
         `);
         const blacklist = query.all() as BlackListData[];
         return blacklist;

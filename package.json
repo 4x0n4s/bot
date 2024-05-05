@@ -11,6 +11,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "discord-api-types": "^0.37.83",
     "discord.js": "^14.14.1",
     "dotenv-extended": "^2.9.0",
     "module-alias": "^2.2.3",

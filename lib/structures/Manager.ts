@@ -1,12 +1,11 @@
-import type { Command, Event, Events} from '@typings';
-import type Bot from '@lib/Bot';
+import type { Command } from '@typings';
+import { Bot, Storage } from '@lib/index';
 import * as fs from 'fs-extra';
 import Emitter from 'events';
-import Storage from '@lib/utils/Storage';
 
 export default class Manager extends Emitter {
     commands = new Storage<string, Command>;
-    constructor (private bot: Bot) {
+    constructor (private bot: Bot) { 
         super();
     }
     

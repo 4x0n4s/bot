@@ -1,22 +1,23 @@
-import type { ClientConstructorOptions, CommandConstructorOptions, Events } from '@typings';
-import * as Discord from 'discord.js';
-import * as fs from 'node:fs';
-import * as Constants from '@lib/utils/Contants';
-import Storage from '@lib/utils/Storage';
-import HandlersManager from '@lib/Manager';
+import type { BotOptions } from '@typings';
+import { Intents } from '@lib/utils/Contants';
+import { 
+    Client, 
+    Manager 
+} from '@lib/index';
+import DatabaseClient from 'src/Database';
 
-export default class Bot extends Discord.Client {
-    constructor (private clientOptions: ClientConstructorOptions) {
+export default class Bot extends Client {
+    constructor (private clientOptions: BotOptions) {
         super({
-            intents: Constants.DiscordIntents
+            intents: Intents
         });
         let { token } = clientOptions;
-        this.login(token);
-        this.handlersManager.load()
+        this.connect(token);
+        this.commandsManager.load()
         this.on('ready', async () => {
-            console.log('coucou')
+            console.log('Logged')
         })
     }
-
-    handlersManager: HandlersManager = new HandlersManager(this);
+    databaseClient!: DatabaseClient;
+    commandsManager: Manager = new Manager(this);
 }

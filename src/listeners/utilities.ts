@@ -1,35 +1,30 @@
 import type { User, MessageReaction, TextChannel } from 'discord.js';
-import { Event } from '@decorators';
+import { Event } from '@lib/functions/decorators';
 import { StarBoardsData, StarBoardConfigData } from '@typings';
+
 import { defaultColor } from '@lib/utils/Contants';
 
 export default class {
     //StarBoards
     @Event('messageReactionAdd')
-    async starboardAdd(reaction: MessageReaction , user: User) {
+    async handleStarBoards(reaction: MessageReaction , user: User) {
         const { message, emoji } = reaction;
         const { guild, channel, reactions } = message;
         if (!guild || !channel || emoji.name !== '⭐') return;
 
         const starboardConfig = global.databaseClient.query(`
-            SELECT *
-            FROM starboard
-            WHERE guildID = ?;
+            SELECT * FROM starboard WHERE guildID = ?;
         `).get(guild.id) as StarBoardConfigData;
 
         if(!starboardConfig.logsID) return;
         const { logsID } = starboardConfig;
 
         let starboard = global.databaseClient.query(`
-            SELECT *
-            FROM starboards
-            WHERE guildID = ?
-            AND channelID = ?
-            AND messageID = ?;
+            SELECT * FROM starboard WHERE guildID = ? AND channelID = ? AND messageID = ?;
         `).get(guild?.id, channel.id, message.id) as StarBoardsData;
 
         const logs = guild.channels.cache.get(logsID) as TextChannel;
-        const e = reactions.cache.get('⭐')?.count
+        const e = reactions.cache.get('⭐')?.count;
 
         if(!starboard) {
             const url = `https://discord.com/channels/${guild.id}/${channel.id}/${message.id}`;
@@ -42,16 +37,15 @@ export default class {
                     color: defaultColor
                 }]
             });
-            starboard = { guildID: guild.id, channelID: channel.id, messageID: message.id, targetID: m.id }
+            starboard = { guildID: guild.id, channelID: channel.id, messageID: message.id, targetID: m.id } as StarBoardsData;
             global.databaseClient.query(`
-                INSERT INTO starboards (guildID, channelID, messageID, targetID)
-                VALUES (?, ?, ?, ?);
+                INSERT INTO starboards (guildID, channelID, messageID, targetID) VALUES (?, ?, ?, ?);
             `).run(...Object.values(starboard));
         }
 
         const { messageID, channelID, targetID } = starboard
         const messages = logs.messages.cache;
-        const m =  messages.get(targetID);
+        const m = messages.get(targetID);
 
         if(Boolean(m)) {
             m?.edit({
@@ -59,16 +53,13 @@ export default class {
             });
         } else {
             global.databaseClient.query(`
-                DELETE FROM starboards
-                WHERE guildID = ?
-                AND channelID = ?
-                AND messageID = ?;
+                DELETE FROM starboards WHERE guildID = ? AND channelID = ? AND messageID = ?;
             `).run(guild.id, channelID, messageID);
         }
     }
 
     @Event('messageReactionRemove')
-    async starboardRemove(reaction: MessageReaction , user: User) {
-       this.starboardAdd(reaction, user);
+    async removeStarBoards(reaction: MessageReaction , user: User) {
+       await this.handleStarBoards(reaction, user);
     }
 }

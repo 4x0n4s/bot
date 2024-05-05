@@ -1,6 +1,6 @@
 import type { Translations, Command } from '@typings';
 import { Message } from 'discord.js';
-import { Event } from '@decorators';
+import { Event } from '@lib/functions/decorators';
 import { defaultPrefix, defaultLang } from '@lib/utils/Contants';
 import * as Converters from '@lib/utils/Converters';
 import * as fs from 'fs-extra';
@@ -16,11 +16,11 @@ export default class {
         let args = content.trim().slice(defaultPrefix.length).split(' ');
         const commandName = args[0].toLocaleLowerCase();
         if(commandName) {
-            const c = global.Main.handlersManager.findCommand(commandName, args) as Command;
+            const c = global.Main.commandsManager.findCommand(commandName, args) as Command;
             args = args.slice(c?.name.split(' ').length);
             const commandArgs = this.parseArguments(c, message, args);
 
-            function translate(t: string) {
+            function translate(t: string): string {
                 let lang = yml.parse(fs.readFileSync(`./langs/${defaultLang}.yml`, { encoding: 'utf-8' })) as Translations;
                 lang[t] = lang[t]
                     .replaceAll('#user', (_, key) => { return (message.author as any)[key] || _ })
@@ -34,7 +34,7 @@ export default class {
     }
 
     bypass(): boolean {
-        let bypass = false;
+        let bypass: boolean = false;
         return bypass
     }
 

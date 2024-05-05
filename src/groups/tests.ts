@@ -1,5 +1,5 @@
 import type { GuildMember, Message, User } from 'discord.js';
-import { Command } from '@decorators';
+import { Command } from '@lib/functions/decorators';
 
 export default class {
     /*

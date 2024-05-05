@@ -1,4 +1,3 @@
-import Bot from '@lib/Bot';
 import WebSocket from 'ws';
 
 export default class extends WebSocket {

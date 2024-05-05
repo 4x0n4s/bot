@@ -1,34 +1,55 @@
-import type { ClientEvents } from 'discord.js';
+export * from 'discord-api-types/v10';
+import { ClientEvents } from 'discord.js';
+import { Message } from '@lib/index';
 
-export type ClientConstructorOptions = {
+export interface Events extends ClientEvents {
+    connected: [];
+    messageReceived: [message: Message]
+}
+
+export interface ClientSettings {
+    token?: string,
+    intents?: number,
+    properties?: {
+        OS: OSs
+    }
+}
+
+export type OSs = 'Linux' | 'Discord IOS' | 'Discord Android';
+export type ImageFormats = 'JPG' | 'PNG' | 'WEDP' | 'GIF';
+
+
+export interface URLFunction {
+    format: ImageFormat
+}
+
+export type Languages = 'fr' | 'en';
+export type Translations = {
+    [key: string]: string
+}
+
+export interface BotOptions {
     token: string,
     dev: string,
-    slashCommands?: boolean
 }
 
 export type Command = CommandConstructorOptions & { 
     exec: Function
 };
-export type Event = {
-    name: keyof Events,
-    exec: Function 
-}
 
-export type CommandConstructorOptions = {
+export interface CommandConstructorOptions {
     name: string,
     arguments: CommandArgumentsData[],
     description: [string, string][],
     list: ListsData,
     forceUpdate?: boolean
 };
-
-export type CommandArgumentsData = {
+export interface CommandArgumentsData {
     id: string,
     type: CommandArgumentsTypesData,
     array?: boolean,
     required?: boolean
 }
-
 export type CommandArgumentsTypesData = typeof CommandArgumentsTypes 
     | 'any'
     | 'string'
@@ -49,6 +70,21 @@ export enum CommandArgumentsTypes {
     Channel = 'channel',
 }
 
+export interface Event {
+    name: keyof Events,
+    exec: Function 
+}
+
+
+
+
+
+
+
+
+
+
+
 export type ListsData = 
     | 'Test'
     | 'Moderation'
@@ -62,29 +98,20 @@ export enum Lists {
     Utilities = 'Utilities'
 }
 
-export interface Events extends ClientEvents {
-    test: [c: string]
-}
-
-export type BlackListData = {
+export interface BlackListData {
     userID: string,
     authorID: string,
     reason: string
 }
 
-export type StarBoardsData = {
+export interface StarBoardsData {
     messageID: string,
     channelID: string,
     guildID: string,
     targetID: string
 }
 
-export type StarBoardConfigData = {
+export interface StarBoardConfigData {
     logsID: string,
     guildID: string
-}
-export type Languages = 'fr' | 'en';
-
-export type Translations = {
-    [key: string]: string
 }
