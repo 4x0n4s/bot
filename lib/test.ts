@@ -11,10 +11,6 @@ client.on('connected', async () => {
 client.on('messageReceived', async (message: Message) => {
     if(!message.creator?.bot) {
         message.send('Test');
-        message.send(message.creator?.avatarURL({
-            format: 'PNG'
-        }) as string)
-        console.log(message.creator)
     }
     
 })

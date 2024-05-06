@@ -1,14 +1,13 @@
 import WebSocket, { OPEN } from 'ws';
-import { DiscordGateway } from '@lib/utils/Endpoints';
-import { 
-    Client, 
-    ClientUser, 
-    Message 
-} from '@lib/index';
+import * as Endpoints from '@lib/utils/Endpoints';
+import { Client, Storage, ClientUser, Guild, Role, Member, Message, Channel } from '@lib/index';
+import { APIChannel, APIGuild, APIGuildMember, APIRole } from 'discord-api-types/v10';
+import { request } from 'undici';
+
 
 export default class extends WebSocket {
     constructor(private client: Client) {
-        super(DiscordGateway);
+        super(Endpoints.DiscordGateway);
     }
 
     connect(token: string) {
@@ -35,6 +34,7 @@ export default class extends WebSocket {
 
             if(t === 'READY') {
                 this.client.user = new ClientUser(this.client, d.user);
+                await this.client.fetchGuilds();
                 this.client.emit('connected');
             }
 

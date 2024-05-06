@@ -1,9 +1,6 @@
 import type { BotOptions } from '@typings';
 import { Intents } from '@lib/utils/Contants';
-import { 
-    Client, 
-    Manager 
-} from '@lib/index';
+import { Client, Manager } from '@lib/index';
 import DatabaseClient from 'src/Database';
 
 export default class Bot extends Client {
@@ -14,7 +11,7 @@ export default class Bot extends Client {
         let { token } = clientOptions;
         this.connect(token);
         this.commandsManager.load()
-        this.on('ready', async () => {
+        this.on('connected', async () => {
             console.log('Logged')
         })
     }

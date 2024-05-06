@@ -1,5 +1,5 @@
 import { Client, Message } from '@lib/index';
-import { DiscordApiEndpoint } from '@lib/utils/Contants';
+import { DiscordApiEndpoint } from '@lib/utils/Endpoints';
 import { request } from 'undici';
 
 export default class Context {
