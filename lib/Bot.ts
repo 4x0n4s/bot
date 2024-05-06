@@ -1,5 +1,5 @@
 import type { BotOptions } from '@typings';
-import { Intents } from '@lib/utils/Contants';
+import { Intents } from '@lib/utilities/Constants';
 import { Client, Manager } from '@lib/index';
 import DatabaseClient from 'src/Database';
 

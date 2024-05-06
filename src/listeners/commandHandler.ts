@@ -1,8 +1,8 @@
 import type { Translations, Command } from '@typings';
 import { Message } from 'discord.js';
-import { Event } from '@lib/functions/decorators';
-import { defaultPrefix, defaultLang } from '@lib/utils/Contants';
-import * as Converters from '@lib/utils/Converters';
+import { Event } from '@lib/utilities/decorators';
+import { defaultPrefix, defaultLang } from '@lib/utilities/Constants';
+import * as Converters from '@lib/utilities/Converters';
 import * as fs from 'fs-extra';
 import * as yml from 'yaml';
 

@@ -1,4 +1,5 @@
-import { APIRole, APIUser, RESTPatchAPICurrentUserJSONBody, URLFunction } from '@typings';
+import { APIRole, URLFunction } from '@typings';
+import { Endpoints } from '@lib/utilities/Constants';
 import { Client } from '@lib/index';
 
 export default class Role {
@@ -20,7 +21,7 @@ export default class Role {
     color: number;
     icon: string | null | undefined;
     iconURL(avatarURLFunction: URLFunction): string | null {
-        return this.icon ? `https://cdn.discordapp.com/role-icons/${this.ID}/${this.icon}.${avatarURLFunction.format.toLowerCase()}` : null;
+        return this.icon ? Endpoints.ATTACHEMENTS + `/role-icons/${this.ID}/${this.icon}.${avatarURLFunction.format.toLowerCase()}` : null;
     }
     emoji: string | null | undefined;
     hoist: boolean;

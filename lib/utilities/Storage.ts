@@ -16,10 +16,11 @@ export default class Storage<K = string, V = any> extends Map<K, V> {
       return keys.map(key => super.get(key));
     }
    
-    sets(entries: [K, V][]): void {
+    sets(entries: [K, V][]): this {
       entries.forEach(([key, value]) => {
         super.set(key, value);
       });
+      return this;
     }
 
     deletes(keys: K[]): void {

@@ -1,4 +1,5 @@
 import { APIUser, URLFunction } from '@typings';
+import { Endpoints } from '@lib/utilities/Constants';
 import { Client } from '@lib/index';
 
 export default class User {
@@ -23,10 +24,10 @@ export default class User {
     avatar: string | null;
     banner: string | null | undefined;
     avatarURL(avatarURLFunction: URLFunction): string | null {
-        return this.avatar ? `https://cdn.discordapp.com/avatars/${this.ID}/${this.avatar}.${avatarURLFunction.format.toLowerCase()}` : null;
+        return this.avatar ? Endpoints.ATTACHEMENTS + `/avatars/${this.ID}/${this.avatar}.${avatarURLFunction.format.toLowerCase()}` : null;
     }
     bannerURL(bannerURLFunction: URLFunction): string | null {
-        return this.banner ? `https://cdn.discordapp.com/avatars/${this.ID}/${this.avatar}.${bannerURLFunction.format.toLowerCase()}` : null;
+        return this.banner ? Endpoints.ATTACHEMENTS + `/avatars/${this.ID}/${this.avatar}.${bannerURLFunction.format.toLowerCase()}` : null;
     } 
     bot: boolean | undefined;
     flags: number | undefined;

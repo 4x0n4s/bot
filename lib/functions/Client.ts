@@ -1,10 +1,10 @@
 import { ClientSettings, Events } from '@typings';
+import { Endpoints } from '@lib/utilities/Constants';
 import { Channel, ClientUser, Guild, Storage } from '@lib/index';
-import * as Endpoints from '@lib/utils/Endpoints';
 
+import WebSocket from "@lib/ws/WebSocket";
 import EventEmitter from 'events';
 import { request } from 'undici';
-import WebSocket from "@lib/ws/WebSocket";
 
 export default class Client extends EventEmitter {
     private _ws: WebSocket = new WebSocket(this);
@@ -46,7 +46,7 @@ export default class Client extends EventEmitter {
     }
 
     async fetchGuilds() {
-        const req = await request(Endpoints.DiscordApiEndpoint + '/users/@me/guilds', {
+        const req = await request(Endpoints.API + '/users/@me/guilds', {
             method: 'GET',
             headers: {
                 'Authorization': `Bot ${this.token}`,
@@ -56,7 +56,7 @@ export default class Client extends EventEmitter {
 
         const guilds = await req.body.json() as any[];
         for (const guild of guilds) {
-            let server: any = await request(Endpoints.DiscordApiEndpoint + `/guilds/${guild.id}`, {
+            let server: any = await request(Endpoints.API + `/guilds/${guild.id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bot ${this.token}`,
@@ -74,7 +74,7 @@ export default class Client extends EventEmitter {
     }
 
     async fetchGuildChannels(ID: string) {
-        let req = await request(Endpoints.DiscordApiEndpoint + `/guilds/${ID}/channels`, {
+        let req = await request(Endpoints.API + `/guilds/${ID}/channels`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bot ${this.token}`,

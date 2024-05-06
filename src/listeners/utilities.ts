@@ -1,8 +1,8 @@
 import type { User, MessageReaction, TextChannel } from 'discord.js';
-import { Event } from '@lib/functions/decorators';
+import { Event } from '@lib/utilities/decorators';
 import { StarBoardsData, StarBoardConfigData } from '@typings';
 
-import { defaultColor } from '@lib/utils/Contants';
+import { defaultColor } from '@lib/utilities/Constants';
 
 export default class {
     //StarBoards

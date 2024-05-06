@@ -1,6 +1,6 @@
 import { APIChannel, APIGuild, URLFunction } from '@typings';
+import { Endpoints } from '@lib/utilities/Constants';
 import { Client, Storage, Channel } from '@lib/index';
-import { request } from 'undici';
 
 export default class Guild {
     constructor (private client: Client, data: any) {
@@ -20,10 +20,10 @@ export default class Guild {
     icon: string | null;
     banner: string | null;
     iconURL(avatarURLFunction: URLFunction): string | null {
-        return this.icon ? `https://cdn.discordapp.com/icons/${this.ID}/${this.icon}.png *.${avatarURLFunction.format.toLowerCase()}` : null;
+        return this.icon ? Endpoints.ATTACHEMENTS + `/icons/${this.ID}/${this.icon}.png *.${avatarURLFunction.format.toLowerCase()}` : null;
     }
     bannerURL(bannerURLFunction: URLFunction): string | null {
-        return this.banner ? `https://cdn.discordapp.com/banners/${this.ID}/${this.banner}.${bannerURLFunction.format.toLowerCase()}` : null;
+        return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${bannerURLFunction.format.toLowerCase()}` : null;
     }
     premiumTier: number | null;
     channels: Storage<string, Channel>;

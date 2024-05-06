@@ -1,5 +1,5 @@
 import WebSocket, { OPEN } from 'ws';
-import * as Endpoints from '@lib/utils/Endpoints';
+import * as Endpoints from '@lib/utilities/Endpoints';
 import { Client, Storage, ClientUser, Guild, Role, Member, Message, Channel } from '@lib/index';
 import { APIChannel, APIGuild, APIGuildMember, APIRole } from 'discord-api-types/v10';
 import { request } from 'undici';

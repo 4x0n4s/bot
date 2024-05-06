@@ -1,6 +1,6 @@
 import type { Message, TextChannel } from 'discord.js';
 import { parseEmoji } from 'discord.js';
-import { Command } from '@lib/functions/decorators';
+import { Command } from '@lib/utilities/decorators';
 
 export default class {
     /*

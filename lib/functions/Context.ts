@@ -1,5 +1,5 @@
 import { Client, Message } from '@lib/index';
-import { DiscordApiEndpoint } from '@lib/utils/Endpoints';
+import { Endpoints } from '@lib/utilities/Constants';
 import { request } from 'undici';
 
 export default class Context {
@@ -8,7 +8,7 @@ export default class Context {
     }
 
     async send(content: string) {
-        await request(DiscordApiEndpoint + `/channels/${this.message.channelID}/messages`, {
+        await request(Endpoints.API + `/channels/${this.message.channelID}/messages`, {
             method: 'POST',
             body: JSON.stringify({
                 content,
