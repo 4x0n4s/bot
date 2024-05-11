@@ -1,6 +1,6 @@
 import WebSocket, { OPEN } from 'ws';
 import { Endpoints, Intents } from 'lib/utilities/Constants';
-import { Client, Storage, ClientUser, Guild, Role, Member, Message, Channel } from 'lib/index';
+import { Client, Storage, ClientUser, Guild, Role, Member, Message, TextChannel } from 'lib/index';
 import { APIChannel, APIGuild, APIGuildMember, APIRole } from 'discord-api-types/v10';
 import { request } from 'undici';
 
@@ -40,6 +40,11 @@ export default class extends WebSocket {
 
             if(t === 'MESSAGE_CREATE') {
                 this.client.emit('messageReceived', new Message(this.client, d));
+            }
+
+            if(t === 'CHANNEL_CREATE') {
+                console.log(d);
+                
             }
         });
 
