@@ -1,14 +1,14 @@
 import { APIRole, URLFunction } from '@typings';
-import { Endpoints } from '@lib/utilities/Constants';
-import { Client } from '@lib/index';
+import { Endpoints } from 'lib/utilities/Constants';
+import { Client } from 'lib/index';
 
 export default class Role {
     constructor(private client: Client, data: APIRole) {
         this.ID = data.id;
         this.name = data.name;
         this.color = data.color;
-        this.icon = data.icon;
-        this.emoji = data.unicode_emoji;
+        this.icon = data.icon ?? null;
+        this.emoji = data.unicode_emoji ?? null;
         this.hoist = data.hoist;
         this.position = data.position;
         this.permissions = data.permissions;
@@ -19,11 +19,11 @@ export default class Role {
     ID: string;
     name: string;
     color: number;
-    icon: string | null | undefined;
+    icon: string | null;
     iconURL(avatarURLFunction: URLFunction): string | null {
         return this.icon ? Endpoints.ATTACHEMENTS + `/role-icons/${this.ID}/${this.icon}.${avatarURLFunction.format.toLowerCase()}` : null;
     }
-    emoji: string | null | undefined;
+    emoji: string | null;
     hoist: boolean;
     position: number;
     permissions: string;

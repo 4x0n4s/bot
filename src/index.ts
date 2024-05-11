@@ -1,12 +1,9 @@
-import { Bot } from '@lib/index';
-import DatabaseClient from './Database';
-import Server from './server/';
+import { Bot } from 'lib/index';
+import DatabaseClient from 'src/Database';
+import Server from 'src/server/';
 
 import * as dotEnvExtended from 'dotenv-extended';
-import 'module-alias/register';
-
-let env = dotEnvExtended.load()
-
+let env = dotEnvExtended.load();
 
 global.Main = new Bot({
     dev: env.MODE,

@@ -3,3 +3,4 @@ bun.lockb
 datas.db
 tsconfig.json
 package-lock.json
+*.log

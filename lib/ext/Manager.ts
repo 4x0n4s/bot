@@ -1,12 +1,20 @@
-import type { Command } from '@typings';
-import { Bot, Storage } from '@lib/index';
-import * as fs from 'fs-extra';
+import { Command, ManagerEvents, KeyTypes } from '@typings';
+import { Client, Storage } from 'lib/index';
 import Emitter from 'events';
+import * as fs from 'fs-extra';
 
 export default class Manager extends Emitter {
-    commands = new Storage<string, Command>;
-    constructor (private bot: Bot) { 
+    commands = new Storage<KeyTypes, Command>;
+    constructor (private client: Client) { 
         super();
+    }
+
+    on<Event extends keyof ManagerEvents>(
+        event: Event,
+        listener: (...args: ManagerEvents[Event]) => void,
+    ): this {
+        super.on(event, listener);
+        return this;
     }
     
     getCommands() {
@@ -27,7 +35,6 @@ export default class Manager extends Emitter {
 
     async load() {
         for (let dirName of ['./groups', './listeners']) {
-
             const dirs = fs.readdirSync('./src/' + dirName, { withFileTypes: true });
             for (const dir of dirs) {
                 if(dir.isDirectory()) {

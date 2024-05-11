@@ -1,5 +1,0 @@
-discord.js
-module-alias
-undici
-dotenv-extended
-yaml

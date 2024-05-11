@@ -1,6 +1,6 @@
 export * from 'discord-api-types/v10';
 import { ClientEvents } from 'discord.js';
-import { Message } from '@lib/index';
+import { Message } from 'lib/index';
 
 export interface Events extends ClientEvents {
     connected: [];
@@ -15,12 +15,41 @@ export interface ClientSettings {
     }
 }
 
+export type KeyTypes = string | undefined | null;
+
 export type OSs = 'Linux' | 'Discord IOS' | 'Discord Android';
 export type ImageFormats = 'JPG' | 'PNG' | 'WEDP' | 'GIF';
 
+export type Emoji = string;
+
+export interface MessageReferenceOptions {
+    channelID: string,
+    messageID: string
+}
+
+export enum ChannelTypes {
+       GuildText = 0,
+       DM = 1,
+       GuildVoice = 2,
+       GroupDM = 3,
+       GuildCategory = 4,
+       GuildAnnouncement = 5,
+       AnnouncementThread = 10,
+       PublicThread = 11,
+       PrivateThread = 12,
+       GuildStageVoice = 13,
+       GuildDirectory = 14,
+       GuildForum = 15,
+       GuildMedia = 16,
+}
+
+export interface StandardEmoji {
+    ID: string,
+    name: Emoji
+}
 
 export interface URLFunction {
-    format: ImageFormat
+    format?: ImageFormats
 }
 
 export type Languages = 'fr' | 'en';
@@ -32,6 +61,18 @@ export interface BotOptions {
     token: string,
     dev: string,
 }
+
+export interface ManagerEvents {
+    commandExecuted: [];
+}
+
+export type CollectorInteractions = ''
+export interface CollectorEvents<I> {
+	collect(collected: any): any;
+	end(collected: T[], reason: V): any;
+}
+
+
 
 export type Command = CommandConstructorOptions & { 
     exec: Function

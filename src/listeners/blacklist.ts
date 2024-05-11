@@ -1,6 +1,6 @@
 import type { GuildBan } from 'discord.js';
 import type { BlackListData } from '@typings';
-import { Event } from '@lib/utilities/decorators';
+import { Event } from 'lib/utilities/decorators';
 
 export default class {
     @Event('guildBanRemove')

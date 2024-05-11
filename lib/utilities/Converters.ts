@@ -1,6 +1,6 @@
 import type { Guild, GuildMember, GuildBasedChannel, Message, Role, User, GuildChannel } from 'discord.js';
-import type Bot from '@lib/Bot';
-import * as RegExps from '@lib/utilities/regexps';
+import type Bot from 'src/Bot';
+import * as RegExps from 'lib/utilities/regexps';
 
 let False = [''];
 let True = [''];

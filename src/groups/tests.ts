@@ -1,5 +1,5 @@
-import type { GuildMember, Message, User } from 'discord.js';
-import { Command } from '@lib/utilities/decorators';
+import type { Message, User } from 'lib/index';
+import { Command } from 'lib/utilities/decorators';
 
 export default class {
     /*
@@ -8,14 +8,11 @@ export default class {
 
     @Command({
         name: 'test',
-        arguments: [{ id: 'm', type: 'user' }],
+        arguments: [],
         description: [['test', 'test']],
         list: 'Test'
     })
-    async test(message: Message, args: {
-        m: User
-    }) {
-        console.log('0' + args.m)
-        message.reply('test');
+    async test(message: Message) {
+        message.send('test');
     }
 }   

@@ -1,5 +1,5 @@
-import { Client, Message } from '@lib/index';
-import { Endpoints } from '@lib/utilities/Constants';
+import { Client, Message } from 'lib/index';
+import { Endpoints } from 'lib/utilities/Constants';
 import { request } from 'undici';
 
 export default class Context {

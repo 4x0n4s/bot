@@ -1,9 +1,9 @@
-import { APIChannel, APIGuild, URLFunction } from '@typings';
-import { Endpoints } from '@lib/utilities/Constants';
-import { Client, Storage, Channel } from '@lib/index';
+import { KeyTypes, APIGuild, URLFunction } from '@typings';
+import { Endpoints } from 'lib/utilities/Constants';
+import { Client, Storage, Channel, Member, Emoji, Role } from 'lib/index';
 
 export default class Guild {
-    constructor (private client: Client, data: any) {
+    constructor (private client: Client, data: APIGuild) {
         this.ID = data.id;
         this.name = data.name;
         this.description = data.description;
@@ -11,7 +11,9 @@ export default class Guild {
         this.banner = data.banner;
         this.premiumTier = Number(data.premium_tier);
         this.channels = new Storage();
-        this.channels.sets(data.channels.map((channel: any) => [channel.id, new Channel(this.client, channel)])); 
+        this.members = new Storage();
+        this.roles = new Storage();
+        this.emojis = new Storage();
     }
 
     ID: string | null;
@@ -19,12 +21,15 @@ export default class Guild {
     description: string | null;
     icon: string | null;
     banner: string | null;
-    iconURL(avatarURLFunction: URLFunction): string | null {
-        return this.icon ? Endpoints.ATTACHEMENTS + `/icons/${this.ID}/${this.icon}.png *.${avatarURLFunction.format.toLowerCase()}` : null;
+    iconURL({ format = 'PNG' }: URLFunction): string | null {
+        return this.icon ? Endpoints.ATTACHEMENTS + `/icons/${this.ID}/${this.icon}.${format.toLowerCase()}` : null;
     }
-    bannerURL(bannerURLFunction: URLFunction): string | null {
-        return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${bannerURLFunction.format.toLowerCase()}` : null;
+    bannerURL({ format = 'PNG' }: URLFunction): string | null {
+        return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${format.toLowerCase()}` : null;
     }
     premiumTier: number | null;
-    channels: Storage<string, Channel>;
+    channels: Storage<KeyTypes, Channel>;
+    members: Storage<KeyTypes, Member>;
+    roles: Storage<KeyTypes, Role>;
+    emojis: Storage<KeyTypes, Emoji>;
 }
