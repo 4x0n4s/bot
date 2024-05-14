@@ -14,3 +14,5 @@ client.on('messageReceived', async (message: Message) => {
     }
     
 })
+
+import 'fs-extra'

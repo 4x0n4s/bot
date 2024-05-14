@@ -1,6 +1,6 @@
-import type { Bot } from 'lib/index';
+import type { Bot } from 'src/Bot';
 import type DatabaseClient from 'src/Database';
-import type Gateway from 'src/server/WebSocket';
+import type Gateway from 'src/gateway/WebSocket';
 
 export {};
 

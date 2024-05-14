@@ -1,9 +1,12 @@
-import { APIRole, URLFunction } from '@typings';
+import { URLFunction } from '@typings';
+import { APIRole } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
+import Base from 'lib/functions/Base';
 import { Client } from 'lib/index';
 
-export default class Role {
+export default class Role extends Base {
     constructor(private client: Client, data: APIRole) {
+        super();
         this.ID = data.id;
         this.name = data.name;
         this.color = data.color;
@@ -20,8 +23,8 @@ export default class Role {
     name: string;
     color: number;
     icon: string | null;
-    iconURL(avatarURLFunction: URLFunction): string | null {
-        return this.icon ? Endpoints.ATTACHEMENTS + `/role-icons/${this.ID}/${this.icon}.${avatarURLFunction.format.toLowerCase()}` : null;
+    iconURL({ format  = 'PNG' }: URLFunction): string | null {
+        return this.icon ? Endpoints.ATTACHEMENTS + `/role-icons/${this.ID}/${this.icon}.${format.toLowerCase()}` : null;
     }
     emoji: string | null;
     hoist: boolean;

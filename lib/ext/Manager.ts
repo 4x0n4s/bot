@@ -5,7 +5,7 @@ import * as fs from 'fs-extra';
 
 export default class Manager extends Emitter {
     commands = new Storage<KeyTypes, Command>;
-    constructor (private client: Client) { 
+    constructor () { 
         super();
     }
 

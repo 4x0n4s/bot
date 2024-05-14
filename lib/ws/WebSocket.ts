@@ -1,7 +1,8 @@
-import WebSocket, { OPEN } from 'ws';
+import { } from 'lib/typings';
+import {  } from 'discord-api-types/v10';
 import { Endpoints, Intents } from 'lib/utilities/Constants';
 import { Client, Storage, ClientUser, Guild, Role, Member, Message, TextChannel } from 'lib/index';
-import { APIChannel, APIGuild, APIGuildMember, APIRole } from 'discord-api-types/v10';
+import WebSocket, { OPEN } from 'ws';
 import { request } from 'undici';
 
 
@@ -39,12 +40,14 @@ export default class extends WebSocket {
             }
 
             if(t === 'MESSAGE_CREATE') {
-                this.client.emit('messageReceived', new Message(this.client, d));
+                let m = new Message(this.client, d);
+                this.client.emit('messageReceived', m);
+                this.client.channels.get(m.channelID)?.messages.set(m.ID, m);
             }
 
             if(t === 'CHANNEL_CREATE') {
-                console.log(d);
-                
+                let c = '';
+                this.client.channels.set(t, '')
             }
         });
 

@@ -1,19 +1,22 @@
-import type { BotOptions } from '@typings';
-import { Intents } from 'lib/utilities/Constants';
-import { Client, Manager } from 'lib/index';
+import { BotOptions } from '@typings';
+import { Manager } from 'lib/index';
+import { Client } from 'discord.js';
 import DatabaseClient from 'src/Database';
+import { Intents } from '#lib/utilities/Constants';
 
 export default class Bot extends Client {
     constructor (private botOptions: BotOptions) {
-        super();
+        super({
+            intents: Intents.All
+        });
         let { token } = botOptions;
-        this.connect(token);
+        this.login(token);
         this.commandsManager.load();
-        this.on('connected', async () => {
+        this.on('ready', async () => {
             console.log('Logged')
         });
     }
 
     databaseClient!: DatabaseClient;
-    commandsManager: Manager = new Manager(this);
+    commandsManager: Manager = new Manager();
 }

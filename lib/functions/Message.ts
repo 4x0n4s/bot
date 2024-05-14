@@ -1,28 +1,40 @@
-import { APIMessage, Emoji, StandardEmoji } from '@typings';
+import { 
+    Channels, 
+    Emoji, 
+    StandardEmoji 
+} from '@typings';
 import { Endpoints } from 'lib/utilities/Constants';
-import { type Client, User, Guild, Member } from 'lib/index';
+import Base from 'lib/functions/Base';
+import { 
+    Client, 
+    User, 
+    Guild, 
+    Member, 
+    TextChannel
+} from 'lib/index';
 import { request } from 'undici';
-import Reactions from './Reactions';
 
-export default class Message {
+export default class Message extends Base {
     constructor(private client: Client, data: any) {
+        super();
+        const guild = client.guilds.get(data.guild_id);
         this.ID = data.id;
         this.content = data.content;
         this.channelID = data.channel_id;
         this.guildID = data.guild_id;
-        this.guild = client.guilds.get(data.guild_id) as Guild;
+        this.guild = guild ?? null;
         this.creator = new User(client, data.author);
-        this.member = new Member(client, data.author, this.guild);
-        this._reactions = new Reactions(this.client, this);
-        this.reactions = this._reactions.reactions();
+        this.member = guild?.members.get(data.author.id) ?? null;
+        this.channel = new TextChannel(client, '' as any)
+        this.reactions = this.client.rest.messages.getReactions(this);
     }
     
-    private _reactions: Reactions;
     ID: string;
     content: string | null;
-    guild: Guild;
+    guild: Guild | null;
     creator: User | null;
     member: Member | null;
+    channel: Channels;
     channelID: string | null;
     guildID: string | null;
     reactions: any;
@@ -60,10 +72,10 @@ export default class Message {
 
     addReactions(emojis: Emoji | Emoji[] | StandardEmoji | StandardEmoji[]) {
         if(!Array.isArray(emojis)) emojis = [emojis] as any[];
-        this._reactions.addReactions(emojis);
+        this.client.rest.messages.addReactions(this, emojis);
     }
     removeReactions(emojis: Emoji[] | StandardEmoji[] | Emoji | StandardEmoji) {
         if(!Array.isArray(emojis)) emojis = [emojis] as any[];
-        this._reactions.addReactions(emojis);
+        this.client.rest.messages.addReactions(this, emojis);
     }
 }

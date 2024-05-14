@@ -8,7 +8,7 @@ export default class {
         const { guild, user } = ban;
         let blacklist = this.getBlacklist();
         const isBlacklisted = blacklist
-            .map(bl => { return bl.userID })
+            .map(bl => bl.userID)
             .includes(user.id);
 
         if(isBlacklisted) {
@@ -20,7 +20,7 @@ export default class {
 
      getBlacklist(): BlackListData[] {
         const query = databaseClient.query(`
-            SELECT userID FROM blacklist
+            SELECT * FROM blacklist
         `);
         const blacklist = query.all() as BlackListData[];
         return blacklist;

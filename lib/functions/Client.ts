@@ -1,17 +1,31 @@
-import { KeyTypes, ClientSettings, Events } from '@typings';
+import { 
+    KeyTypes,
+    ClientSettings,
+    Events,
+    Channels 
+} from '@typings';
 import { Endpoints } from 'lib/utilities/Constants';
-import { Channel, ClientUser, Guild, Member, Message, Storage, User } from 'lib/index';
-
+import RESTManager from 'lib/rest/RESTManager';
 import WebSocket from "lib/ws/WebSocket";
+import {
+    Storage,
+    ClientUser,
+    User,
+    Guild, 
+    Member, 
+    Message,  
+    TextChannel
+} from 'lib/index';
 import EventEmitter from 'events';
 import { request } from 'undici';
 
 export default class Client extends EventEmitter {
     private _ws: WebSocket = new WebSocket(this);
     private _user!: ClientUser;
+    rest: RESTManager = new RESTManager(this);
     guilds: Storage<KeyTypes, Guild> = new Storage();
     users: Storage<KeyTypes, User> = new Storage();
-    channels: Storage<KeyTypes, Channel> = new Storage();
+    channels: Storage<KeyTypes, Channels> = new Storage();
     token!: string | null;
     isReady: boolean = false;
 
@@ -30,8 +44,7 @@ export default class Client extends EventEmitter {
         }
     }
 
-    on<Event extends keyof Events>
-    (
+    on<Event extends keyof Events>(
         event: Event,
         listener: (...args: Events[Event]) => void,
     ): this {
@@ -127,8 +140,8 @@ export default class Client extends EventEmitter {
         const channels = await body.json() as any[];
         const guild = this.guilds.get(ID);
         for (const channel of channels) {
-            let c = new Channel(this, channel);
-            await this.fecthChannelMessages(guild?.ID as string, c);
+            let c = new TextChannel(this, channel);  await this.fecthChannelMessages(guild?.ID as string, c); 
+            
             guild?.channels.set(channel.id, c);
             this.channels.set(channel.id, c);
         }
@@ -151,7 +164,7 @@ export default class Client extends EventEmitter {
         }
     }
 
-    async fecthChannelMessages(guildID: string, channel: Channel) {
+    async fecthChannelMessages(guildID: string, channel: TextChannel) {
         const { body } = await request(Endpoints.API + `/channels/${channel.ID}/messages`, {
             method: 'GET',
             headers: {

@@ -1,10 +1,15 @@
 import { URLFunction } from '@typings';
-import { APITeam, APITeamMember } from 'discord-api-types/v10';
+import { APITeam } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
-import { Client, TeamMember, User } from 'lib/index';
+import Base from 'lib/functions/Base';
+import { 
+    Client,
+    TeamMember 
+} from 'lib/index';
 
-export default class Team {
+export default class Team extends Base {
     constructor(private client: Client, data: APITeam) {
+        super();
         this.ID = data.id;
         this.name = data.name;
         this.icon = data.icon;

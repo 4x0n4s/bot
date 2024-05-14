@@ -1,9 +1,9 @@
-import type { Message, ActionRowData, MessageActionRowComponentData, User } from 'discord.js';
-import { ComponentType, cleanContent } from 'discord.js';
+import { Message, ActionRowData, MessageActionRowComponentData, User, ComponentType } from 'discord.js';
 import type { APIEmbed } from 'discord-api-types/v10';
 import { defaultColor, defaultPrefix } from 'lib/utilities/Constants';
 import { Command } from 'lib/utilities/decorators';
 import { ListsData } from '@typings';
+import Main, { databaseClient } from 'src/index';
 
 export default class {
     /*
@@ -20,7 +20,7 @@ export default class {
         let { commandName } = args;
 
         if (commandName) {
-            let command = global.Main.commandsManager.commands.get(commandName);
+            let command = Main.commandsManager.commands.get(commandName);
             if(command) {
                 message.reply({ 
                     embeds: [{
@@ -39,7 +39,7 @@ export default class {
             }
         }
 
-        const commands = global.Main.commandsManager.commands.all();
+        const commands = Main.commandsManager.commands.all();
         let page = 0;
         const lists = ['Test', 'Moderation', 'Utilities', 'Logs'] as ListsData[];
 
@@ -101,10 +101,9 @@ export default class {
         let { user } = args;
 
         if(!user) {
-            await global.Main.users.fetch(message.content
+            await Main.users.fetch(message.content
                     .trim()
-                    .split(' ')
-                    .filter(m => m.length > 0)[1])
+                    .split(' ')[1])
                 .then(u => user = u)
                 .catch(() => user = message.author);
         }
@@ -136,10 +135,9 @@ export default class {
         let { user } = args;
 
         if(!user) {
-            await global.Main.users.fetch(message.content
+            await Main.users.fetch(message.content
                     .trim()
-                    .split(' ')
-                    .filter(m => m.length > 0)[1])
+                    .split(' ')[1])
                 .then(u => user = u)
                 .catch(() => user = message.author);
         }

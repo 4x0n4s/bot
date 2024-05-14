@@ -7,3 +7,7 @@ export enum Endpoints {
 export enum Intents {
     All = 3276799
 };
+
+export const defaultLang = 'fr';
+export const defaultPrefix = '!';
+export const defaultColor = 0x6900b9

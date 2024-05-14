@@ -1,19 +1,28 @@
-import { KeyTypes, APIGuild, URLFunction } from '@typings';
+import { 
+    KeyTypes, 
+    URLFunction,
+    Reason
+} from '@typings';
+import { APIGuild } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
-import { Client, Storage, Channel, Member, Emoji, Role } from 'lib/index';
+import Base from 'lib/functions/Base';
+import { 
+    Client,
+    Storage,
+    Member,
+    Emoji,
+    Role 
+} from 'lib/index';
 
-export default class Guild {
+export default class Guild extends Base {
     constructor (private client: Client, data: APIGuild) {
+        super();
         this.ID = data.id;
         this.name = data.name;
         this.description = data.description;
         this.icon = data.icon
         this.banner = data.banner;
-        this.premiumTier = Number(data.premium_tier);
-        this.channels = new Storage();
-        this.members = new Storage();
-        this.roles = new Storage();
-        this.emojis = new Storage();
+        this.premiumTier = data.premium_tier.valueOf();
     }
 
     ID: string | null;
@@ -27,9 +36,17 @@ export default class Guild {
     bannerURL({ format = 'PNG' }: URLFunction): string | null {
         return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${format.toLowerCase()}` : null;
     }
-    premiumTier: number | null;
-    channels: Storage<KeyTypes, Channel>;
-    members: Storage<KeyTypes, Member>;
-    roles: Storage<KeyTypes, Role>;
-    emojis: Storage<KeyTypes, Emoji>;
+    premiumTier: number;
+    channels: Storage<KeyTypes, any> = new Storage();
+    members: Storage<KeyTypes, Member> = new Storage();
+    roles: Storage<KeyTypes, Role> = new Storage();
+    emojis: Storage<KeyTypes, Emoji> = new Storage();
+
+    async modifiyGuildName(name?: string, r?: Reason) {
+        if(this.ID) await this.client.rest.guilds.udpateData('name', name, this.ID, r?.reason);
+    }
+
+    async modifyGuildIcon(name?: string, r?: Reason) {
+        if(this.ID) await this.client.rest.guilds.udpateData('icon', name, this.ID, r?.reason);
+    }
 }

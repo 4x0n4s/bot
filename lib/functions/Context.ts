@@ -1,22 +1,11 @@
-import { Client, Message } from 'lib/index';
-import { Endpoints } from 'lib/utilities/Constants';
-import { request } from 'undici';
+import Base from 'lib/functions/Base';
+import { 
+    Client, 
+    Message 
+} from 'lib/index';
 
-export default class Context {
+export default class Context extends Base {
     constructor (private client: Client, public message: Message) {
-
-    }
-
-    async send(content: string) {
-        await request(Endpoints.API + `/channels/${this.message.channelID}/messages`, {
-            method: 'POST',
-            body: JSON.stringify({
-                content,
-            }),
-            headers: {
-                'Authorization': `Bot ${this.client.token}`,
-                'Content-Type': 'application/json'
-            }
-        });
+        super();
     }
 }

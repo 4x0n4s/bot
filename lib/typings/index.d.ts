@@ -1,10 +1,11 @@
-export * from 'discord-api-types/v10';
 import { ClientEvents } from 'discord.js';
-import { Message } from 'lib/index';
+import { Message, TextChannel, Guild } from 'lib/index';
 
 export interface Events extends ClientEvents {
     connected: [];
-    messageReceived: [message: Message]
+    messageReceived: [message: Message];
+    guildChannelCreate: [];
+
 }
 
 export interface ClientSettings {
@@ -27,25 +28,22 @@ export interface MessageReferenceOptions {
     messageID: string
 }
 
-export enum ChannelTypes {
-       GuildText = 0,
-       DM = 1,
-       GuildVoice = 2,
-       GroupDM = 3,
-       GuildCategory = 4,
-       GuildAnnouncement = 5,
-       AnnouncementThread = 10,
-       PublicThread = 11,
-       PrivateThread = 12,
-       GuildStageVoice = 13,
-       GuildDirectory = 14,
-       GuildForum = 15,
-       GuildMedia = 16,
+export interface EditGuildOptions {
+    name: string;
+    description: string | null;
+    icon: string | null;
+    banner: string | null;
+    region: string;
+    slash
 }
-
+ 
 export interface StandardEmoji {
     ID: string,
     name: Emoji
+}
+
+export interface Reason {
+    reason?: string
 }
 
 export interface URLFunction {
@@ -66,7 +64,12 @@ export interface ManagerEvents {
     commandExecuted: [];
 }
 
-export type CollectorInteractions = ''
+export type CollectorInteractions = '';
+export interface CollectorSettings {
+    time?: number | null;
+    filter?: (interaction: any) => boolean,
+    customID?: string
+}
 export interface CollectorEvents<I> {
 	collect(collected: any): any;
 	end(collected: T[], reason: V): any;

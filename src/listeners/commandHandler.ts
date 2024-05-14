@@ -13,7 +13,7 @@ export default class {
         const { bot } = author;
         if(bot || !guild || !content.startsWith('!')) return;
         
-        let args = content.trim().slice(defaultPrefix.length).split(' ');
+        let args = content.trim().replace(/  +/g, ' ').slice(defaultPrefix.length).split(' ');
         const commandName = args[0].toLocaleLowerCase();
         if(commandName) {
             const c = global.Main.commandsManager.findCommand(commandName, args) as Command;
@@ -43,13 +43,13 @@ export default class {
         c.arguments.forEach(arg => {
             switch (arg.type) {
                 case 'channel':
-                    commandArgs[arg.id] = !arg.array ? Converters.parseChannels(message, args) : Converters.parseChannels(message, args)[0];
+                    commandArgs[arg.id] = !arg.array ? Converters.parseChannels(message) : Converters.parseChannels(message)[0];
                 case 'role':
-                    commandArgs[arg.id] = !arg.array ? Converters.parseRoles(message, args) : Converters.parseRoles(message, args)[0];
+                    commandArgs[arg.id] = !arg.array ? Converters.parseRoles(message) : Converters.parseRoles(message)[0];
                 case 'user':
-                    commandArgs[arg.id] = !arg.array ? Converters.parseUsers(message, args) : Converters.parseUsers(message, args)[0];
+                    commandArgs[arg.id] = !arg.array ? Converters.parseUsers(message) : Converters.parseUsers(message)[0];
                 case 'any':
-                    commandArgs[arg.id] = !args;
+                    commandArgs[arg.id] = args;
             }
         });
         return commandArgs;
