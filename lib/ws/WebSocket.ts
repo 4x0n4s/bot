@@ -43,11 +43,7 @@ export default class extends WebSocket {
                 let m = new Message(this.client, d);
                 this.client.emit('messageReceived', m);
                 this.client.channels.get(m.channelID)?.messages.set(m.ID, m);
-            }
-
-            if(t === 'CHANNEL_CREATE') {
-                let c = '';
-                this.client.channels.set(t, '')
+                this.client.guilds.get(m.guildID)?.channels.get(m.channelID)?.messages.set(m.ID, m);
             }
         });
 

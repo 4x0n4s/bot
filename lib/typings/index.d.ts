@@ -1,20 +1,7 @@
-import { ClientEvents } from 'discord.js';
+import { APIEmbed, APIActionRowComponent, APIMessageActionRowComponent } from 'discord-api-types/v10';
+import { ClientEvents, Message } from 'discord.js';
 import { Message, TextChannel, Guild } from 'lib/index';
 
-export interface Events extends ClientEvents {
-    connected: [];
-    messageReceived: [message: Message];
-    guildChannelCreate: [];
-
-}
-
-export interface ClientSettings {
-    token?: string,
-    intents?: number,
-    properties?: {
-        OS: OSs
-    }
-}
 
 export type KeyTypes = string | undefined | null;
 
@@ -23,9 +10,38 @@ export type ImageFormats = 'JPG' | 'PNG' | 'WEDP' | 'GIF';
 
 export type Emoji = string;
 
-export interface MessageReferenceOptions {
-    channelID: string,
-    messageID: string
+
+export interface ClientSettings {
+    token?: string,
+    intents?: number,
+    properties?: {
+        OS: OSs
+    }
+}
+export interface BotOptions {
+    token: string,
+    dev: string,
+}
+
+
+
+export interface MessageReference {
+    messageID: string,
+    channelID: string | null,
+    guildID: string | null
+}
+
+export interface CreateMessageOptionsData {
+    content: string,
+    embeds: APIEmbed | APIEmbed[];
+    messageReference: MessageReference,
+    rows: ActionRow<MessageActionRowComponent>[]
+}
+
+export interface CreateMessageReplyOptionsData {
+    content: string,
+    embeds: APIEmbed | APIEmbed[];
+    rows: ActionRow<MessageActionRowComponent>[]
 }
 
 export interface EditGuildOptions {
@@ -35,6 +51,11 @@ export interface EditGuildOptions {
     banner: string | null;
     region: string;
     slash
+}
+
+export interface CreateEmojiOptions {
+    name: string,
+    url: string
 }
  
 export interface StandardEmoji {
@@ -55,14 +76,6 @@ export type Translations = {
     [key: string]: string
 }
 
-export interface BotOptions {
-    token: string,
-    dev: string,
-}
-
-export interface ManagerEvents {
-    commandExecuted: [];
-}
 
 export type CollectorInteractions = '';
 export interface CollectorSettings {
@@ -70,10 +83,25 @@ export interface CollectorSettings {
     filter?: (interaction: any) => boolean,
     customID?: string
 }
-export interface CollectorEvents<I> {
+export interface CollectorEvents {
 	collect(collected: any): any;
-	end(collected: T[], reason: V): any;
+	end(collected, reason): any;
 }
+
+export interface ManagerEvents {
+    commandExecuted: [];
+}
+
+export interface Events extends ClientEvents {
+    connected: [];
+    messageReceived: [message: Message];
+    guildChannelCreate: [];
+
+}
+
+
+
+
 
 
 
@@ -118,16 +146,6 @@ export interface Event {
     name: keyof Events,
     exec: Function 
 }
-
-
-
-
-
-
-
-
-
-
 
 export type ListsData = 
     | 'Test'

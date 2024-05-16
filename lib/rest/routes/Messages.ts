@@ -19,10 +19,6 @@ export default class Messages {
         return ''
     }
 
-    async getReactions(message: Message, emoji?: string) {
-        return message.channel?.messages.get(message.ID)?.reactions;
-    }
-
     async addReactions(message: Message, emojis: Emoji[] | StandardEmoji[]) {
         let length = emojis.length;
         for (const emoji of emojis) {
@@ -41,7 +37,7 @@ export default class Messages {
         let length = emojis.length;
         for (const emoji of emojis) {
             await request(Endpoints.API + `/channels/${message.channelID}/messages/${message.ID}/reactions/${typeof emoji == 'object' ? `${emoji.name}:${emoji.ID}` : encodeURIComponent(emoji)}/@me`, {
-                method: 'PUT',
+                method: 'DELETE',
                 headers: {
                     'Authorization': `Bot ${this.client.token}`,
                     'Content-Type': 'application/json'

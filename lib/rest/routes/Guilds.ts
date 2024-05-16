@@ -15,18 +15,18 @@ export default class Guilds {
             method: 'PATCH',
             headers: { ...this.restManager.headers, 'X-Audit-Log-Reason': reason },
             body: JSON.stringify({
-                afk_channel_id: 
+                afk_channel_id: ''
             } as APIGuild)
         });
     }
 
     async addMemberRoles(guildID: Guild['ID'], memberID: Member['ID'], rolesIDs: Role['ID'][], reason?: string) {
         const guildData = this.client.guilds.get(guildID);
-        const guildRoles = guildData?.roles;
         const guildMember = guildData?.members.get(memberID);
+        const guildMembersRoles = guildMember?.roles;
 
-        const rolesHas = (roleID: string) => guildRoles?.has(roleID);
-        rolesIDs = rolesIDs.filter(rolesHas);
+        const memberHasRole = (roleID: string) => guildMembersRoles?.has(roleID);
+        rolesIDs = rolesIDs.filter(memberHasRole);
 
         let length = rolesIDs.length;
         for (const roleID of rolesIDs) {

@@ -13,6 +13,7 @@ import Emoji from 'lib/functions/Emoji';
 import Team from 'lib/functions/Team';
 import TeamMember from 'lib/functions/TeamMember';
 import BaseChannel from 'lib/functions/BaseChannel';
+import Reaction from 'lib/functions/Reaction';
 
 export {
     Manager,
@@ -29,5 +30,6 @@ export {
     Context,
     Team,
     TeamMember,
-    BaseChannel
+    BaseChannel,
+    Reaction
 }

@@ -2,7 +2,6 @@ import {
     KeyTypes,
     ClientSettings,
     Events,
-    Channels 
 } from '@typings';
 import { Endpoints } from 'lib/utilities/Constants';
 import RESTManager from 'lib/rest/RESTManager';
@@ -25,7 +24,7 @@ export default class Client extends EventEmitter {
     rest: RESTManager = new RESTManager(this);
     guilds: Storage<KeyTypes, Guild> = new Storage();
     users: Storage<KeyTypes, User> = new Storage();
-    channels: Storage<KeyTypes, Channels> = new Storage();
+    channels: Storage<KeyTypes, any> = new Storage();
     token!: string | null;
     isReady: boolean = false;
 

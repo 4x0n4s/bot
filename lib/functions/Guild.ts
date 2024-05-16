@@ -1,7 +1,8 @@
 import { 
     KeyTypes, 
     URLFunction,
-    Reason
+    Reason,
+    CreateEmojiOptions
 } from '@typings';
 import { APIGuild } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
@@ -23,6 +24,10 @@ export default class Guild extends Base {
         this.icon = data.icon
         this.banner = data.banner;
         this.premiumTier = data.premium_tier.valueOf();
+        this.channels = new Storage();
+        this.members = new Storage();
+        this.roles = new Storage();
+        this.emojis = new Storage();
     }
 
     ID: string | null;
@@ -37,16 +42,17 @@ export default class Guild extends Base {
         return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${format.toLowerCase()}` : null;
     }
     premiumTier: number;
-    channels: Storage<KeyTypes, any> = new Storage();
-    members: Storage<KeyTypes, Member> = new Storage();
-    roles: Storage<KeyTypes, Role> = new Storage();
-    emojis: Storage<KeyTypes, Emoji> = new Storage();
+    channels: Storage<KeyTypes, any>;
+    members: Storage<KeyTypes, Member>;
+    roles: Storage<KeyTypes, Role>;
+    emojis: Storage<KeyTypes, Emoji>;
 
-    async modifiyGuildName(name?: string, r?: Reason) {
-        if(this.ID) await this.client.rest.guilds.udpateData('name', name, this.ID, r?.reason);
+    async modifiyGuildName(name?: string, reason?: string) {
+        if(this.ID) await this.client.rest.guilds.edit('name', name);
     }
 
-    async modifyGuildIcon(name?: string, r?: Reason) {
-        if(this.ID) await this.client.rest.guilds.udpateData('icon', name, this.ID, r?.reason);
+    async createEmojis(emojis: CreateEmojiOptions | CreateEmojiOptions[], reason?: string) {
+        if(!Array.isArray(emojis)) emojis = [emojis] as CreateEmojiOptions[];
+        return this.client.rest.emojis.create(this, emojis, reason);
     }
 }

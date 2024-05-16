@@ -1,8 +1,9 @@
 import { 
-    Channels, 
-    Emoji, 
+    Emoji,
+    CreateMessageReplyOptionsData,
     StandardEmoji 
 } from '@typings';
+import { APIReaction } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
 import Base from 'lib/functions/Base';
 import { 
@@ -10,7 +11,8 @@ import {
     User, 
     Guild, 
     Member, 
-    TextChannel
+    TextChannel,
+    Reaction
 } from 'lib/index';
 import { request } from 'undici';
 
@@ -26,7 +28,7 @@ export default class Message extends Base {
         this.creator = new User(client, data.author);
         this.member = guild?.members.get(data.author.id) ?? null;
         this.channel = new TextChannel(client, '' as any)
-        this.reactions = this.client.rest.messages.getReactions(this);
+        this.reactions = data.reactions?.map((reaction: APIReaction) => new Reaction(client, reaction));
     }
     
     ID: string;
@@ -34,7 +36,7 @@ export default class Message extends Base {
     guild: Guild | null;
     creator: User | null;
     member: Member | null;
-    channel: Channels;
+    channel: any;
     channelID: string | null;
     guildID: string | null;
     reactions: any;
@@ -52,30 +54,23 @@ export default class Message extends Base {
         });
     }
 
-    async reply(content: string) {
-        await request(Endpoints.API + `/channels/${this.channelID}/messages`, {
-            method: 'POST',
-            body: JSON.stringify({
-                content,
-                message_reference: {
-                    message_id: this.ID,
-                    channel_id: this.channelID,
-                    guild_id: this.guildID
-                }
-            }),
-            headers: {
-                'Authorization': `Bot ${this.client.token}`,
-                'Content-Type': 'application/json'
+    async createReply(options: CreateMessageReplyOptionsData) {
+        await this.client.rest.channels.createMessage(this, {
+            ...options,
+            messageReference: {
+                guildID: this.guildID,
+                channelID: this.channelID,
+                messageID: this.ID                
             }
         });
     }
 
-    addReactions(emojis: Emoji | Emoji[] | StandardEmoji | StandardEmoji[]) {
-        if(!Array.isArray(emojis)) emojis = [emojis] as any[];
-        this.client.rest.messages.addReactions(this, emojis);
+    async addReactions(emojis: Emoji | Emoji[] | StandardEmoji | StandardEmoji[]) {
+        if(!Array.isArray(emojis)) emojis = [emojis] as Emoji[];
+        await this.client.rest.messages.addReactions(this, emojis);
     }
-    removeReactions(emojis: Emoji[] | StandardEmoji[] | Emoji | StandardEmoji) {
-        if(!Array.isArray(emojis)) emojis = [emojis] as any[];
-        this.client.rest.messages.addReactions(this, emojis);
+    async removeReactions(emojis: Emoji[] | StandardEmoji[] | Emoji | StandardEmoji) {
+        if(!Array.isArray(emojis)) emojis = [emojis] as Emoji[];
+        await this.client.rest.messages.addReactions(this, emojis);
     }
 }
