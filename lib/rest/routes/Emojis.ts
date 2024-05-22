@@ -1,7 +1,7 @@
 import { CreateEmojiOptions} from '@typings';
 import { APIMessage } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
-import { ImageToB64 } from '#lib/utilities/b64';
+import { ImageToB64 } from 'lib/utilities/b64';
 import RESTManager from 'lib/rest/RESTManager';
 import { Client, Guild } from 'lib/index';
 import { request } from "undici";

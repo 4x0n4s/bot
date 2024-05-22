@@ -1,10 +1,7 @@
-import { } from 'lib/typings';
-import {  } from 'discord-api-types/v10';
+import { } from 'discord-api-types/v10';
 import { Endpoints, Intents } from 'lib/utilities/Constants';
-import { Client, Storage, ClientUser, Guild, Role, Member, Message, TextChannel } from 'lib/index';
+import { Client, Storage, ClientUser, Message } from 'lib/index';
 import WebSocket, { OPEN } from 'ws';
-import { request } from 'undici';
-
 
 export default class extends WebSocket {
     constructor(private client: Client) {
@@ -17,7 +14,7 @@ export default class extends WebSocket {
         });
           
         this.on('message', async message => {
-            const payload = JSON.parse(message.toString());
+            const payload = JSON.parse(message.toString())
             const { t, op, d } = payload;
             
             if(op === 10) {

@@ -1,14 +1,14 @@
 import Bot from 'src/Bot';
 import DatabaseClient from 'src/Database';
-import Server from 'src/gateway/WebSocket';
+//import Server from 'src/functions/WebSocket';
 
 import * as dotEnvExtended from 'dotenv-extended';
 let env = dotEnvExtended.load();
 
-export default new Bot({
+global.databaseClient =  new DatabaseClient();
+global.Main = new Bot({
     dev: env.MODE,
     token: env.TOKEN,
-})
+});
 
-export const gateway = new Server();
-export const databaseClient = new DatabaseClient();
+//global.gateway =  new Server();

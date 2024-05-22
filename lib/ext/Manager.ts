@@ -1,10 +1,11 @@
-import { Command, ManagerEvents, KeyTypes } from '@typings';
-import { Client, Storage } from 'lib/index';
+import { Command, ManagerEvents, KeyTypes, Event } from '@typings';
+import { Storage } from 'lib/index';
 import Emitter from 'events';
 import * as fs from 'fs-extra';
 
 export default class Manager extends Emitter {
-    commands = new Storage<KeyTypes, Command>;
+    commands = new Storage<KeyTypes, Command>();
+    events = new Storage<KeyTypes, Event>();
     constructor () { 
         super();
     }
@@ -31,6 +32,11 @@ export default class Manager extends Emitter {
     registerCommands(c: Command[]) {
         c.forEach(c => this.commands.set(c.name, c));
         return [...this.commands];   
+    }
+
+    registerEvents(c: Event[]) {
+        c.forEach(c => this.events.set(c.eventName, c));
+        return [...this.events];   
     }
 
     async load() {

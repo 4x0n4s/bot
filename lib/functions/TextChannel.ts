@@ -1,4 +1,4 @@
-import { } from '@typings';
+import { KeyTypes } from '@typings';
 import { APITextChannel } from 'discord-api-types/v10';
 import BaseChannel from 'lib/functions/BaseChannel';
 import { 
@@ -21,5 +21,5 @@ export default class TextChannel extends BaseChannel {
     lastMessageID: string | null;
     isNsfw: boolean;
     cooldown: number;
-    messages: Storage<string | null , Message> = new Storage();
+    messages: Storage<KeyTypes, Message> = new Storage();
 }

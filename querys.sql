@@ -1,5 +1,14 @@
 CREATE TABLE 
 IF NOT EXISTS 
+helpers (
+    ID INTEGER PRIMARY KEY,
+    botID TEXT,
+    helperName TEXT,
+    token TEXT UNIQUE
+);
+
+CREATE TABLE 
+IF NOT EXISTS 
 sanctions (
     ID INTEGER PRIMARY KEY,
     sanction TEXT,
@@ -9,7 +18,7 @@ sanctions (
     reason TEXT,
     date NUMBER
 );
-            
+
 CREATE TABLE 
 IF NOT EXISTS 
 starboard (

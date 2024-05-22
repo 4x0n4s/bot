@@ -1,4 +1,3 @@
-import { } from '@typings';
 import { } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
 import { Client } from 'lib/index';

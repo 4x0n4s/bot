@@ -1,14 +1,15 @@
 testMessage: 'salut'
 
 # Mod
-banMessage: '#length membres ont été bannis avec succès'
-kickMessage: '#length membres ont été expulsés avec succès'
-warnMessage: '#member.username a été averti avec succès'
-clearSanctionsMessage: '#length sanctions supprimées'
-deleteSanctionMessage: 'sanction #warnID supprimée avec succès'
+banMessage: '$length membres ont été bannis du serveur'
+kickMessage: '$length membres ont été expulsés du serveur'
+warnMessage: '`$member` a été averti'
+clearSanctionsMessage: '$length sanctions supprimées'
+deleteSanctionMessage: 'Sanction `$warnID` supprimée'
 
-banDefaultReason: 'Ban : Aucune raison spécifiée'
-kickDefaultReason: 'Expulsion : Aucune raison spécifiée'
-warnDefaultReason: 'Avertissement : Aucune raison spécifiée'
+defaultReason: 'Aucune raison spécifiée'
+banDefaultReason: 'Aucune raison spécifiée'
+kickDefaultReason: 'Aucune raison spécifiée'
+warnDefaultReason: 'Aucune raison spécifiée'
 
-setStarBoardsChannel: 'Le salon des StarBoards est désormais #channel'
+setStarBoardsChannel: 'Le salon qui affichera les StarBoards est désormais $channel'

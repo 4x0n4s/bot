@@ -18,7 +18,7 @@ export default class {
         }
     }
 
-     getBlacklist(): BlackListData[] {
+    getBlacklist(): BlackListData[] {
         const query = databaseClient.query(`
             SELECT * FROM blacklist
         `);

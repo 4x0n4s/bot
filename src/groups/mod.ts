@@ -1,4 +1,5 @@
 import { GuildMember, Message } from 'discord.js';
+import { Member } from 'lib/index';
 import { Command } from 'lib/utilities/decorators';
 
 export default class {
@@ -20,15 +21,12 @@ export default class {
         }
 
         let length = databaseClient.query(`
-            DELETE FROM sanctions
-            WHERE memberID = ?
-            RETURNING *
+            DELETE FROM sanctions WHERE memberID = ?
+            RETURNING *;
         `).all(member.id).length;
- 
-        let reply = (t: string) => translate(t) // #length
-            .replaceAll('#length', String(length));
-        
-        message.reply(reply('clearSanctionsMessage'));
+
+        message.reply(translate('clearSanctionsMessage')
+                .replace('$length', length.toString()));
     }
 
     @Command({
@@ -45,19 +43,18 @@ export default class {
             return;
         }
 
-        let length = members.length;
         if(!reason) reason = translate('banDefaultReason');
 
-        members.forEach(member => member.ban({ reason })
-            .then(member => this.addSanction('Ban', member.id, message.author.id, message.guild?.id as string, reason))
-            .catch(() => length--)
-        );
+        let length = members.length;
+        for (const member of members) {
+            member.ban({ reason })
+                .then(member => this.addSanction('ban', member.id, message.author.id, message.guild?.id as string, reason))
+                .catch(() => length--);
+        }
 
-        let reply = (t: string) => translate(t) // #length, #reason
-            .replaceAll('#length', String(length))
-            .replaceAll('#reason', reason);
-        
-        await message.reply(reply('banMessage'));
+        await message.reply(translate('banMessage')
+            .replace('$length', length.toString())
+            .replace('$reason', reason));
     }
 
     @Command({
@@ -75,18 +72,18 @@ export default class {
             return;
         }
 
-        let length = members.length;
         if(!reason) reason = translate('kickDefaultReason');
-        members.forEach(member => member.kick(reason)
-            .then(member => this.addSanction('Kick', member.id, message.author.id, message.guild?.id as string, reason))
-            .catch(() => length--)
-        );
 
-        let reply = (t: string) => translate(t) // #length, #reason
-            .replaceAll('#length', String(length))
-            .replaceAll('#reason', reason)
-    
-        await message.reply(reply('kickMessage'));
+        let length = members.length;
+        for (const member of members) {
+            member.kick(reason)
+                .then(member => this.addSanction('kick', member.id, message.author.id, message.guild?.id as string, reason))
+                .catch(() => length--);
+        }
+
+        await message.reply(translate('kickMessage')
+            .replace('$length', length.toString())
+            .replace('$reason', reason));
     }
 
     @Command({
@@ -103,23 +100,13 @@ export default class {
             return;
         }
 
-        let h = databaseClient.query(`
-            DELETE FROM sanctions
-            WHERE ID = ?
-            AND memberID = ?
-            AND guildID = ?;
-            RETURNING *;
-        `).get(warnID,  member.id, message.guild?.id as string);
+        databaseClient.query(`
+            DELETE FROM sanctions WHERE ID = ? AND memberID = ? AND guildID = ?;
+        `).run(warnID,  member.id, message.guild?.id as string);
 
-        if(!h) {
-            return;
-        }
-
-        let reply = (t: string) => translate(t) // #warnID, #member
-            .replaceAll('#member', `${member}`)
-            .replaceAll('#warnID', String(warnID));
-
-        message.reply(reply('deleteSanctionMessage'));
+        message.reply(translate('deleteSanctionMessage')
+            .replace('$member', member.user.globalName ?? member.user.username)
+            .replace('$warnID', warnID.toString()));
     }
 
     @Command({
@@ -138,20 +125,17 @@ export default class {
 
         if(!reason) reason = translate('warnDefaultReason');
 
-        const reply = (t: string) => translate(t) // #member, #reason
-            .replaceAll('#member', `${member}`)
-            .replaceAll('#reason', reason);
-        
-        message.reply(reply('warnMessage'));
+        message.reply(translate('warnMessage')
+            .replace('$member', member.user.globalName ?? member.user.username)
+            .replace('$reason', reason));
+
         this.addSanction('Warn', member.id, message.author.id, message.guild?.id as string, reason);
     }
 
     //Customs functions
     addSanction(sanction: string, memberID: string, authorID: string, guildID: string, reason: string) {
         databaseClient.prepare(`
-            INSERT INTO sanctions
-            (sanction, memberID, authorID, guildID, reason, date)
-            VALUES (?, ?, ?, ?, ?, ?);
+            INSERT INTO sanctions (sanction, memberID, authorID, guildID, reason, date) VALUES (?, ?, ?, ?, ?, ?);
         `).run(sanction, memberID, authorID, guildID, reason, Date.now());
     }
 }   

@@ -1,15 +1,14 @@
 testMessage: 'hey'
 
 # Mod
-banMessage: '#length members are succefuly banned'
-kickMessage: '#length members are succefuly kicked'
-warnMessage: '#member is succefuly warned'
-clearSanctionsMessage: '#length sanctions deleted'
-deleteSanctionMessage: 'sanction #warnID succefuly deleted'
+banMessage: '$length members are succefuly banned'
+kickMessage: '$length members are succefuly kicked'
+warnMessage: '$member is succefuly warned'
+clearSanctionsMessage: '$length sanctions deleted'
+deleteSanctionMessage: 'sanction $warnID succefuly deleted'
 
-banDefaultReason: 'Ban: No specified reason'
-kickDefaultReason: 'Kick: No specified reason'
-warnDefaultReason: 'Warn: No specified reason'
+banDefaultReason: 'No specified reason'
+kickDefaultReason: 'No specified reason'
+warnDefaultReason: 'No specified reason'
 
-
-setStarBoardsChannel: 'The StarBoards display channel is now #channel'
+setStarBoardsChannel: 'The StarBoards display channel is now $channel'

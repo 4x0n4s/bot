@@ -1,19 +1,25 @@
 import { CommandConstructorOptions, Events } from '@typings';
+import { ClientEvents } from 'discord.js';
 
 export function Command (command: CommandConstructorOptions) {
     return function(target: any, key: string, descriptor: PropertyDescriptor) {
-        global.Main.commandsManager.registerCommands([
-                { ...command, exec: descriptor.value.bind(target) as Function}
+        Main.manager.registerCommands([
+                { ...command, callback: descriptor.value.bind(target) as Function}
         ]);
     }
 }
 
 export function Event (name: keyof Events) {
     return function(target: any, key: string, descriptor: PropertyDescriptor) {
-        global.Main.on(
-            name, 
+
+        Main.manager.registerEvents([
+            { eventName: name, callback: descriptor.value.bind(target) as Function }
+        ]);
+
+        Main.on(
+            name as keyof ClientEvents, 
             async (...args) => {
-                await descriptor.value.bind(...args)
+                Main.manager.events.get(name)?.callback(...args)
             }
         );
     }

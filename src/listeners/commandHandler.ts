@@ -1,6 +1,6 @@
 import type { Translations, Command } from '@typings';
 import { Message } from 'discord.js';
-import { Event } from 'lib/utilities/decorators';
+import { Event } from '@decorators';
 import { defaultPrefix, defaultLang } from 'lib/utilities/Constants';
 import * as Converters from 'lib/utilities/Converters';
 import * as fs from 'fs-extra';
@@ -11,24 +11,25 @@ export default class {
     async exec(message: Message) {
         const { author, guild, content } = message;
         const { bot } = author;
-        if(bot || !guild || !content.startsWith('!')) return;
+        if(bot || !guild || !content.startsWith(defaultPrefix)) return;
         
         let args = content.trim().replace(/  +/g, ' ').slice(defaultPrefix.length).split(' ');
         const commandName = args[0].toLocaleLowerCase();
+
         if(commandName) {
-            const c = global.Main.commandsManager.findCommand(commandName, args) as Command;
+            const c = Main.manager.findCommand(commandName, args) as Command;
             args = args.slice(c?.name.split(' ').length);
+
             const commandArgs = this.parseArguments(c, message, args);
 
+            let lang = yml.parse(fs.readFileSync(`./langs/${defaultLang}.yml`, { encoding: 'utf-8' })) as Translations;  
             function translate(t: string): string {
-                let lang = yml.parse(fs.readFileSync(`./langs/${defaultLang}.yml`, { encoding: 'utf-8' })) as Translations;
                 lang[t] = lang[t]
-                    .replaceAll('#user', (_, key) => { return (message.author as any)[key] || _ })
-                    .replaceAll('#guild', (_, key) => { return (message.guild as any)[key] || _ })
+                    .replace('#guild', (_, key) => { return (message.guild as any)[key] || _ })
                 return lang[t]
             }
 
-            c?.exec(message, commandArgs, translate);
+            c?.callback(message, commandArgs, translate);
         }
 
     }
@@ -50,6 +51,9 @@ export default class {
                     commandArgs[arg.id] = !arg.array ? Converters.parseUsers(message) : Converters.parseUsers(message)[0];
                 case 'any':
                     commandArgs[arg.id] = args;
+                case 'string':
+                    commandArgs[arg.id] = args.splice(args.findLastIndex(str => str.includes(','))).join('');
+                    
             }
         });
         return commandArgs;

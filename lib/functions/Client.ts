@@ -73,7 +73,6 @@ export default class Client extends EventEmitter {
         });
 
         const users = await body.json() as any[];
-        console.log(users)
         for (const user of users) {
             let u: any = await request(Endpoints.API + `/users/${user.id}`, {
                 method: 'GET',

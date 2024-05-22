@@ -1,18 +1,21 @@
 import { 
     Emoji,
     CreateMessageReplyOptionsData,
-    StandardEmoji 
+    StandardEmoji,
+    KeyTypes
 } from '@typings';
 import { APIReaction } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
 import Base from 'lib/functions/Base';
 import { 
-    Client, 
+    Client,
+    Storage,
     User, 
     Guild, 
     Member, 
     TextChannel,
-    Reaction
+    Reaction,
+    
 } from 'lib/index';
 import { request } from 'undici';
 
@@ -28,7 +31,7 @@ export default class Message extends Base {
         this.creator = new User(client, data.author);
         this.member = guild?.members.get(data.author.id) ?? null;
         this.channel = new TextChannel(client, '' as any)
-        this.reactions = data.reactions?.map((reaction: APIReaction) => new Reaction(client, reaction));
+        this.reactions = new Storage(data.reactions?.map((reaction: APIReaction) => [reaction.emoji, new Reaction(client, reaction)]));
     }
     
     ID: string;
@@ -39,7 +42,7 @@ export default class Message extends Base {
     channel: any;
     channelID: string | null;
     guildID: string | null;
-    reactions: any;
+    reactions: Storage<KeyTypes, Reaction>;
 
     async send(content: string) {
         await request(Endpoints.API + `/channels/${this.channelID}/messages`, {

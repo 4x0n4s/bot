@@ -1,6 +1,8 @@
 node_modules/
 bun.lockb
 datas.db
+datas.db-sdh
+test.db
 tsconfig.json
 package-lock.json
 *.log

@@ -13,12 +13,7 @@ export default class Messages {
     fetch() {
 
     }
-
-    get get() { 
-        this.restManager
-        return ''
-    }
-
+    
     async addReactions(message: Message, emojis: Emoji[] | StandardEmoji[]) {
         let length = emojis.length;
         for (const emoji of emojis) {

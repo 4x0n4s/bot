@@ -3,7 +3,6 @@ import type { APIEmbed } from 'discord-api-types/v10';
 import { defaultColor, defaultPrefix } from 'lib/utilities/Constants';
 import { Command } from 'lib/utilities/decorators';
 import { ListsData } from '@typings';
-import Main, { databaseClient } from 'src/index';
 
 export default class {
     /*
@@ -18,9 +17,9 @@ export default class {
     })
     async help_command(message: Message, args: { commandName: string }) {
         let { commandName } = args;
-
+        
         if (commandName) {
-            let command = Main.commandsManager.commands.get(commandName);
+            let command = Main.manager.commands.get(commandName);
             if(command) {
                 message.reply({ 
                     embeds: [{
@@ -39,7 +38,7 @@ export default class {
             }
         }
 
-        const commands = Main.commandsManager.commands.all();
+        const commands = Main.manager.commands.all();
         let page = 0;
         const lists = ['Test', 'Moderation', 'Utilities', 'Logs'] as ListsData[];
 
@@ -60,7 +59,7 @@ export default class {
             return embed;
         }
      
-        const components:ActionRowData<MessageActionRowComponentData>[] = [{
+        const components: ActionRowData<MessageActionRowComponentData>[] = [{
             type: 1,
             components: [{
                 type: 3,
@@ -80,8 +79,7 @@ export default class {
             filter: (ctx) => ctx.user.id === message.author.id && ctx.customId === 'help'
         }).on('collect', async ctx => {
             ctx.deferUpdate();
-            const list = String(lists
-                .find(list => list === ctx.values[0]));
+            const list = lists.find(list => list === ctx.values[0]) as string;
             m.edit({
                 embeds: [Embed(list)]
             });

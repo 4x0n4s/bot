@@ -17,7 +17,7 @@ export default class {
         let { emojis } = args;
 
         if(emojis.length === 0) {
-            message.reply('0 emojis')
+            message.reply('0 emojis');
             return;
         }
 

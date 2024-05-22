@@ -1,4 +1,3 @@
-import { } from '@typings';
 import { APIGuild, GatewayGuildModifyDispatch } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/utilities/Constants';
 import RESTManager from 'lib/rest/RESTManager';

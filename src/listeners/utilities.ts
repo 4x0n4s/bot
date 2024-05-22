@@ -1,4 +1,4 @@
-import type { User, MessageReaction, TextChannel } from 'discord.js';
+import type { User, MessageReaction, TextChannel, Message } from 'discord.js';
 import { Event } from 'lib/utilities/decorators';
 import { StarBoardsData, StarBoardConfigData } from '@typings';
 
@@ -8,19 +8,20 @@ export default class {
     //StarBoards
     @Event('messageReactionAdd')
     async handleStarBoards(reaction: MessageReaction , user: User) {
+        let { databaseClient, Main } = global;
         const { message, emoji } = reaction;
         const { guild, channel, reactions } = message;
         if (!guild || !channel || emoji.name !== '⭐') return;
 
-        const starboardConfig = global.databaseClient.query(`
+        const starboardConfig = databaseClient.query(`
             SELECT * FROM starboard WHERE guildID = ?;
         `).get(guild.id) as StarBoardConfigData;
 
         if(!starboardConfig.logsID) return;
         const { logsID } = starboardConfig;
 
-        let starboard = global.databaseClient.query(`
-            SELECT * FROM starboard WHERE guildID = ? AND channelID = ? AND messageID = ?;
+        let starboard = databaseClient.query(`
+            SELECT * FROM starboards WHERE guildID = ? AND channelID = ? AND messageID = ?;
         `).get(guild?.id, channel.id, message.id) as StarBoardsData;
 
         const logs = guild.channels.cache.get(logsID) as TextChannel;
@@ -37,8 +38,8 @@ export default class {
                     color: defaultColor
                 }]
             });
-            starboard = { guildID: guild.id, channelID: channel.id, messageID: message.id, targetID: m.id } as StarBoardsData;
-            global.databaseClient.query(`
+            starboard = { guildID: guild.id, channelID: channel.id, messageID: message.id, targetID: m.id };
+            databaseClient.query(`
                 INSERT INTO starboards (guildID, channelID, messageID, targetID) VALUES (?, ?, ?, ?);
             `).run(...Object.values(starboard));
         }
@@ -52,7 +53,7 @@ export default class {
                 content: `${e} ⭐ <#${channelID}>`
             });
         } else {
-            global.databaseClient.query(`
+            databaseClient.query(`
                 DELETE FROM starboards WHERE guildID = ? AND channelID = ? AND messageID = ?;
             `).run(guild.id, channelID, messageID);
         }

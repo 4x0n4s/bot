@@ -1,5 +1,5 @@
 import { APIEmbed, APIActionRowComponent, APIMessageActionRowComponent } from 'discord-api-types/v10';
-import { ClientEvents, Message } from 'discord.js';
+import { ClientEvents } from 'discord.js';
 import { Message, TextChannel, Guild } from 'lib/index';
 
 
@@ -9,7 +9,7 @@ export type OSs = 'Linux' | 'Discord IOS' | 'Discord Android';
 export type ImageFormats = 'JPG' | 'PNG' | 'WEDP' | 'GIF';
 
 export type Emoji = string;
-
+export type Text = string;
 
 export interface ClientSettings {
     token?: string,
@@ -106,7 +106,12 @@ export interface Events extends ClientEvents {
 
 
 export type Command = CommandConstructorOptions & { 
-    exec: Function
+    callback: Function
+};
+
+export interface Event {
+    eventName: string,
+    callback: Function
 };
 
 export interface CommandConstructorOptions {
@@ -142,11 +147,6 @@ export enum CommandArgumentsTypes {
     Channel = 'channel',
 }
 
-export interface Event {
-    name: keyof Events,
-    exec: Function 
-}
-
 export type ListsData = 
     | 'Test'
     | 'Moderation'
@@ -158,6 +158,19 @@ export enum Lists {
     Test = 'test',
     Moderation = 'Moderation',
     Utilities = 'Utilities'
+}
+
+export interface HelperData {
+    ID: number,
+    botID?: string,
+    token?: string,
+    helperName: string
+}
+
+export interface HelperUpdateData {
+    botID?: string,
+    token?: string,
+    helperName: string
 }
 
 export interface BlackListData {
