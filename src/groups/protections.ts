@@ -21,37 +21,28 @@ export default class {
     }) {
         let { helperIdentifer } = args;
 
-        let helpers: HelperData[];
-        let helper: HelperData;
         let embeds: APIEmbed[];
         let components: APIActionRowComponent<APIMessageActionRowComponent>[];
 
-        let { datas } = Main.helpers;
+        let { datas: helpers } = Main.helpers;
+        let helper = helpers.find(h => h.ID.toString() === helperIdentifer ?? h.helperName === helperIdentifer) ?? { ID: (helpers.at(-1)?.ID ?? 0) + 1, helperName: helperIdentifer } as HelperData;
 
-        helpers = datas;
-        if(helperIdentifer) {
-            helper = Main.helpers.getHelper(helperIdentifer) ?? { 
-                ID: helpers[helpers.length - 1]?.ID ?? 0 + 1
-            } as HelperData;
-            main(helper);
-        } else {
-            helpersList();
-        }
+        console.log(helperIdentifer)
+        helperIdentifer ? main(helper) : helpersList();
 
         // @ts-ignore
         const m = await message.reply({ embeds, components });
         m.createMessageComponentCollector({
             componentType: 3,
-            filter: (interaction) => interaction.user.id === message.author.id
+            filter: i => i.user.id === message.author.id
         }).on('collect', async interaction => {
             interaction.deferUpdate();
             let { customId, values, channel } = interaction;
             let value = values[0];
 
             if(customId.startsWith('editHelper/')) {
-                const helperID = customId.split('id=')[1];
                 let messagesCollector = channel?.createMessageCollector({
-                    filter: (msg) => msg.author.id === message.author.id,
+                    filter: m => m.author.id === message.author.id,
                     max: 1
                 })?.on('end', () => {
                     messagesCollector?.removeAllListeners();
@@ -60,8 +51,7 @@ export default class {
                 await channel?.sendTyping();
                 switch (value) {
                     case 'token':
-                        const qm1 = await channel?.send('Quel sera le token de cet helper?');
-                        
+                        const qm1 = await channel?.send('Quel sera le token de cet helper?'); 
                         messagesCollector?.on('collect', arg => {
                             for (const x of [arg, qm1]) x?.delete();
                             let token = arg?.content as string;
@@ -71,25 +61,22 @@ export default class {
                                 }
                             }).then(async ({ body, statusCode }) => {
                                 const json = await body.json() as any;
-
                                 if(statusCode !== 200) {
                                    interaction.followUp({ content: 'Le token spécifié est invalide', ephemeral: true });
                                    return;
                                 } 
-                                
                                 helper['token'] = token;
                                 helper['botID'] = json.id;
-
                                 main(helper);
                                 interaction.message.edit({ embeds, components });
-
-                                Main.helpers.setHelper(helperID, helper);
+                                Main.helpers.setHelper(helper.ID.toString(), helper);
                             });
                         });
                         break;
 
                     case 'helper name':
-                        const qm2 = await channel?.send('Quel sera le nouveau nom de cet helper?');
+                        helper['helperName']
+                        const qm2 = await channel?.send(`Quel sera le ${helper['helperName'] ? 'nouveau' : ''} nom de cet helper?`);
 
                         messagesCollector?.on('collect', arg => {
                             for (const x of [arg, qm2]) x?.delete();
@@ -99,15 +86,23 @@ export default class {
 
                             main(helper);
                             interaction.message.edit({ embeds, components });
-
-                            Main.helpers.setHelper(helperID, helper);
+                            Main.helpers.setHelper(helper.ID.toString(), helper);
                         });
                         break;
                 }
+            } else if(customId.startsWith('manageHelper/')) {
+                switch (value) {
+                    case 'delete':
+                        Main.helpers.delete(helper.ID.toString());
+                        helpers = Main.helpers.getHelpers();
+                        helpersList();
+                        interaction.message.edit({ embeds, components });
+                        break;
+                }
             } else if(customId === 'helpers') {
-                helpers = datas;
-                helper = helpers.find(helper => helper.ID.toString() === value) as HelperData;
-                if (!helper) helper = { ID: helpers[helpers.length - 1]?.ID ?? 0 + 1 } as HelperData;
+                helpers =  Main.helpers.getHelpers();
+                helper =  Main.helpers.getHelper(value) as HelperData;
+                if (!helper) helper = { ID: (helpers.at(-1)?.ID ?? 0) + 1 } as HelperData;
                 main(helper);
                 interaction.message.edit({ embeds, components });
             } 
@@ -115,10 +110,10 @@ export default class {
 
         m.createMessageComponentCollector({
             componentType: 2,
-            filter: (interaction) => interaction.user.id === message.author.id && ['backtohelpers'].includes(interaction.customId)
+            filter: i => i.user.id === message.author.id && ['backtohelpers'].includes(i.customId)
         }).on('collect', interaction => {
             interaction.deferUpdate();
-            helpers = datas;
+            helpers = Main.helpers.getHelpers();
             helpersList();
             interaction.message.edit({ embeds, components });
         });
@@ -138,10 +133,18 @@ export default class {
                 components: [{
                     type: 3,
                     placeholder: 'Edit',
-                    custom_id: `editHelper/id=${helper['ID']}`,
+                    custom_id: `editHelper`,
                     options: ['Helper Name', 'Token'].map<APISelectMenuOption>(key => ({ label: `Edit ${key}`, value: key.toLowerCase() }))
                 }]
             }, {
+                type: 1,
+                components: [{
+                    type: 3,
+                    placeholder: 'Manage',
+                    custom_id: `manageHelper`,
+                    options: ['Delete', 'Start', 'Restart', 'Stop'].map<APISelectMenuOption>(key => ({ label: key, value: key.toLowerCase() }))
+                }]
+            },{
                 type: 1,
                 components: [{
                     type: 2,
@@ -153,11 +156,10 @@ export default class {
         }
 
         function helpersList() {
-            embeds =  [{
+            embeds = [{
                 title: 'Helpers',
                 color: defaultColor
             }];
-
             components = [{
                 type: 1,
                 components: [{

@@ -9,11 +9,15 @@ export default class Helpers {
     datas: HelperData[];
 
     constructor() {
-        this.datas = databaseClient.query(`SELECT * FROM helpers;`).all() as HelperData[];
+        this.datas = this.getAllHelpersWithDatabase();
         this.store.sets(this.datas.map(helper => [helper.ID.toString(), helper]));
     }
 
-    getWithDatabase(key: string) {
+    getAllHelpersWithDatabase() {
+        return databaseClient.query(`SELECT * FROM helpers;`).all() as HelperData[];
+    }
+
+    getHelperWithDatabase(key: string) {
         const query = databaseClient.query(`
             SELECT * FROM helpers WHERE helperName OR ID = ?;
         `);
@@ -24,26 +28,28 @@ export default class Helpers {
         return this.store.get(key);
     };
 
-    setHelper(key: string, helper: HelperUpdateData) {
-        const keys = Object.keys(helper);
-        const values = Object.values(helper);
+    getHelpers() {
+        return this.store.all();
+    };
+
+    setHelper(key: string, helper: HelperData) {
+        const keys = Object.keys(helper).filter(key => key !== 'ID');
+        const values = Object.entries(helper).filter(([key]) => key !== 'ID').map(data => data[1]);
         const query = databaseClient.query(`
             ${this.store.has(key)
                 ? `UPDATE helpers SET ${keys.map(k => `${k} = ?`).join(', ')} WHERE ID = ?`
                 : `INSERT INTO helpers (${keys.join(', ')}) VALUES (${keys.map(() => '?').join(', ')})`}
         `);
-        query.run(...values, key);
-        this.store.set(key, helper as HelperData);
+        this.store.has(key) ? query.run(...values, key) : query.run(...values); 
+        this.store.set(key, helper);
         return this;
     }
 
     delete(key: string) {
         let query = databaseClient.query(`
-            DELETE FROM helpers WHERE helperName OR ID = ?;
-            RETURNING *;
+            DELETE FROM helpers WHERE helperName OR ID = ?
         `).get(key) as any;
-        this.store.delete(query.ID);
-
-        return query ? true : false;
+        //RETURNING *;
+        this.store.delete(key);
     }
 }

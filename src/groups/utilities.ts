@@ -10,7 +10,7 @@ export default class {
     @Command({
         name: 'create',
         arguments: [{ type: 'any', id: 'emojis' }],
-        description: [['', '']],
+        description: [['create', 'dd']],
         list: 'Utilities'
     })
     async create_emoji(message: Message, args: { emojis: string[] }, translate: (t: string) => string) {
@@ -24,16 +24,18 @@ export default class {
         let guildEmojis = message.guild?.emojis;
 
         let length = emojis.length;
-        emojis.forEach(e => {
-                let emoji = parseEmoji(e);
-                if(emoji?.id && !guildEmojis?.cache.find(e => e.name == emoji.name)) {
-                    const attachment = `https://cdn.discordapp.com/emojis/${emoji.id + emoji.animated ? '.gif' : '.png'}`
-                    message.guild?.emojis.create({
-                        attachment, 
-                        name: emoji.name
-                    }).catch(() => length--);
-                } else length--;
-            });
+        console.log(emojis)
+        for (const e of emojis) {
+            let emoji = parseEmoji(e);
+            if(emoji?.id && !guildEmojis?.cache.find(e => e.name == emoji.name)) {
+                const attachment = `https://cdn.discordapp.com/emojis/${emoji.id + emoji.animated ? '.gif' : '.png'}`
+                await message.guild?.emojis.create({
+                    attachment, 
+                    name: emoji.name
+                }).then(emoji => console.log(`Created new emoji with name ${emoji.name}!`))
+                .catch(console.error);
+            } else length--;
+        }
         await message.reply(`${length} emojis created`);
     }
 

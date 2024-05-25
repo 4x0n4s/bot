@@ -150,9 +150,11 @@ export enum CommandArgumentsTypes {
 export type ListsData = 
     | 'Test'
     | 'Moderation'
+    | 'Protection'
     | 'Utilities'
     | 'Information'
     | 'Logs'
+    | 'Economy'
 
 export enum Lists {
     Test = 'test',
