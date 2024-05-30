@@ -1,21 +1,31 @@
 import { 
     KeyTypes, 
     URLFunction,
-    Reason,
     CreateEmojiOptions
 } from '@typings';
 import { APIGuild } from 'discord-api-types/v10';
-import { Endpoints } from 'lib/utilities/Constants';
-import Base from 'lib/functions/Base';
+import { Endpoints } from '@lib/utilities/Constants';
 import { 
     Client,
     Storage,
     Member,
     Emoji,
     Role 
-} from 'lib/index';
+} from '@lib/index';
+import Base from '@lib/functions/Base';
 
-export default class Guild extends Base {
+export class Guild extends Base {
+    ID: string | null;
+    name: string;
+    description: string | null;
+    icon: string | null;
+    banner: string | null;
+    premiumTier: number;
+    channels: Storage<KeyTypes, any> = new Storage();
+    members: Storage<KeyTypes, Member> = new Storage();;
+    roles: Storage<KeyTypes, Role> = new Storage();;
+    emojis: Storage<KeyTypes, Emoji> = new Storage();;
+    bans: Storage<KeyTypes, Emoji> = new Storage();;
     constructor (private client: Client, data: APIGuild) {
         super();
         this.ID = data.id;
@@ -24,30 +34,16 @@ export default class Guild extends Base {
         this.icon = data.icon
         this.banner = data.banner;
         this.premiumTier = data.premium_tier.valueOf();
-        this.channels = new Storage();
-        this.members = new Storage();
-        this.roles = new Storage();
-        this.emojis = new Storage();
     }
 
-    ID: string | null;
-    name: string;
-    description: string | null;
-    icon: string | null;
-    banner: string | null;
     iconURL({ format = 'PNG' }: URLFunction): string | null {
         return this.icon ? Endpoints.ATTACHEMENTS + `/icons/${this.ID}/${this.icon}.${format.toLowerCase()}` : null;
     }
     bannerURL({ format = 'PNG' }: URLFunction): string | null {
         return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${format.toLowerCase()}` : null;
     }
-    premiumTier: number;
-    channels: Storage<KeyTypes, any>;
-    members: Storage<KeyTypes, Member>;
-    roles: Storage<KeyTypes, Role>;
-    emojis: Storage<KeyTypes, Emoji>;
 
-    async modifiyGuildName(name?: string, reason?: string) {
+    async editGuildName(name?: string, reason?: string) {
         if(this.ID) await this.client.rest.guilds.edit('name', name);
     }
 

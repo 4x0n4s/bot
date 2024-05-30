@@ -1,11 +1,14 @@
-import Base from 'lib/functions/Base';
 import { 
     Client, 
     Message 
-} from 'lib/index';
+} from '@lib/index';
+import Base from '@lib/functions/Base';
 
-export default class Context extends Base {
-    constructor (private client: Client, public message: Message) {
+export class Context extends Base {
+    constructor (
+        client: Client, 
+        message: Message
+    ) {
         super();
     }
 }

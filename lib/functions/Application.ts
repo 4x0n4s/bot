@@ -1,13 +1,17 @@
+import { ApplicationType } from '@typings';
 import { APIApplication } from 'discord-api-types/v10';
-import Base from 'lib/functions/Base';
 import { 
     Client, 
     Team, 
     User 
-} from 'lib/index';
+} from '@lib/index';
+import Base from '@lib/functions/Base';
 
-export default class Application extends Base {
-    constructor(client: Client, data: APIApplication) {
+export class Application extends Base implements ApplicationType {
+    constructor(
+        client: Client, 
+        data: APIApplication
+    ) {
         super();
         this.ID = data.id;
         this.description = data.description;
@@ -20,5 +24,5 @@ export default class Application extends Base {
     owner: User | null;
     description: string;
     team: Team | null;
-    isPublic: boolean;    
+    isPublic: boolean;
 }

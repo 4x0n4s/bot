@@ -1,5 +1,5 @@
-import User from 'lib/functions/User';
+import { User } from '@lib/functions/User';
 
-export default class ClientUser extends User {
+export class ClientUser extends User {
     //Extends
 }

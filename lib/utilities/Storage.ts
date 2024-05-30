@@ -1,4 +1,4 @@
-export default class Storage<K = string, V = any> extends Map<K, V> {
+export class Storage<K = string, V = any> extends Map<K, V> {
   gets(keys: K[]): (V | undefined)[] {
       return keys.map(key => super.get(key));
   }

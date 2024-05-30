@@ -1,6 +1,6 @@
 import { HelperData, HelperUpdateData } from '@typings';
 import { APIEmbed, APIActionRowComponent, APIMessageActionRowComponent, APISelectMenuOption, APIBaseSelectMenuComponent, ComponentType, APIBaseComponent } from 'discord-api-types/v10';
-import { Endpoints, defaultColor } from 'lib/utilities/Constants';
+import { Endpoints, defaultColor } from '@lib/utilities/Constants';
 import { Command, Event } from '@decorators';
 import { Message, StringSelectMenuInteraction } from 'discord.js';
 import { request } from 'undici';
@@ -27,8 +27,7 @@ export default class {
         let { datas: helpers } = Main.helpers;
         let helper = helpers.find(h => h.ID.toString() === helperIdentifer ?? h.helperName === helperIdentifer) ?? { ID: (helpers.at(-1)?.ID ?? 0) + 1, helperName: helperIdentifer } as HelperData;
 
-        console.log(helperIdentifer)
-        helperIdentifer ? main(helper) : helpersList();
+        helperIdentifer ? main(helper) : helpersEmbed();
 
         // @ts-ignore
         const m = await message.reply({ embeds, components });
@@ -95,17 +94,23 @@ export default class {
                     case 'delete':
                         Main.helpers.delete(helper.ID.toString());
                         helpers = Main.helpers.getHelpers();
-                        helpersList();
+                        helpersEmbed();
                         interaction.message.edit({ embeds, components });
                         break;
                 }
             } else if(customId === 'helpers') {
-                helpers =  Main.helpers.getHelpers();
-                helper =  Main.helpers.getHelper(value) as HelperData;
+                helpers = Main.helpers.getHelpers();
+                helper = Main.helpers.getHelper(value) as HelperData;
                 if (!helper) helper = { ID: (helpers.at(-1)?.ID ?? 0) + 1 } as HelperData;
+                if(value === 'deletehelpers') return deleteEmbed();
                 main(helper);
                 interaction.message.edit({ embeds, components });
-            } 
+            } else if(customId === 'deletehelpers') {
+                for (let helperID of values) {
+                    Main.helpers.delete(helperID);
+                }
+                interaction.message.edit({ embeds, components });
+            }
         });
 
         m.createMessageComponentCollector({
@@ -114,8 +119,8 @@ export default class {
         }).on('collect', interaction => {
             interaction.deferUpdate();
             helpers = Main.helpers.getHelpers();
-            helpersList();
-            interaction.message.edit({ embeds, components });
+            helpersEmbed();
+           
         });
 
         function main(helper: HelperData) {
@@ -155,7 +160,7 @@ export default class {
             }];
         }
 
-        function helpersList() {
+        function helpersEmbed() {
             embeds = [{
                 title: 'Helpers',
                 color: defaultColor
@@ -168,8 +173,23 @@ export default class {
                     custom_id: 'helpers',
                     options: [
                         ...helpers?.map(({ helperName, ID }, i) => ({ label: `${i + 1} - ${helperName?.charAt(0).toUpperCase() + helperName?.slice(1)}`, value: ID.toString() })), 
-                        { label: 'Configurer un Helper', value: 'createhelper' }
+                        { label: 'Configurer un Helper', value: 'createhelper' },
+                        { label: 'Supprimer des Helpers', value: 'deletehelpers' }
                     ]
+                }]
+            }];
+        }
+
+        function deleteEmbed() {
+            components = [{
+                type: 1,
+                components: [{
+                    type: 3,
+                    placeholder: 'Helpers',
+                    custom_id: 'deletehelpers',
+                    min_values: 1,
+                    max_values: helpers.length,
+                    options: helpers?.map(({ helperName, ID }, i) => ({ label: `${i + 1} - ${helperName?.charAt(0).toUpperCase() + helperName?.slice(1)}`, value: ID.toString() }))
                 }]
             }];
         }

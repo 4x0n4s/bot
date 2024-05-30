@@ -1,6 +1,6 @@
 import { GuildMember, Message } from 'discord.js';
-import { Member } from 'lib/index';
-import { Command } from 'lib/utilities/decorators';
+import { Member } from '@lib/index';
+import { Command } from '@lib/utilities/decorators';
 
 export default class {
     /*
@@ -134,8 +134,10 @@ export default class {
 
     //Customs functions
     addSanction(sanction: string, memberID: string, authorID: string, guildID: string, reason: string) {
+        let data = Object.values({ sanction, memberID, authorID, guildID, reason, date: performance.now() });
         databaseClient.prepare(`
             INSERT INTO sanctions (sanction, memberID, authorID, guildID, reason, date) VALUES (?, ?, ?, ?, ?, ?);
-        `).run(sanction, memberID, authorID, guildID, reason, Date.now());
+        `).run(...data);
+        redisClient.hSet(`sanctions/${guildID}/${memberID}`, data);
     }
 }   

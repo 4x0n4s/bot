@@ -2,10 +2,11 @@ import {
     KeyTypes,
     ClientSettings,
     Events,
+    ClientType
 } from '@typings';
-import { Endpoints } from 'lib/utilities/Constants';
-import RESTManager from 'lib/rest/RESTManager';
-import WebSocket from "lib/ws/WebSocket";
+import { Endpoints } from '@lib/utilities/Constants';
+import RESTManager from '@lib/rest/RESTManager';
+import WebSocket from "@lib/gateway/WebSocket";
 import {
     Storage,
     ClientUser,
@@ -14,19 +15,20 @@ import {
     Member, 
     Message,  
     TextChannel
-} from 'lib/index';
+} from '@lib/index';
 import EventEmitter from 'events';
 import { request } from 'undici';
 
-export default class Client extends EventEmitter {
+export class Client extends EventEmitter implements ClientType {
     private _ws: WebSocket = new WebSocket(this);
     private _user!: ClientUser;
-    rest: RESTManager = new RESTManager(this);
+    rest!: RESTManager;
+    token!: string | null;
+    isReady: boolean = false;
     guilds: Storage<KeyTypes, Guild> = new Storage();
     users: Storage<KeyTypes, User> = new Storage();
     channels: Storage<KeyTypes, any> = new Storage();
-    token!: string | null;
-    isReady: boolean = false;
+
 
     constructor(public settings: ClientSettings) {
         super();
@@ -37,7 +39,9 @@ export default class Client extends EventEmitter {
         this.token = token ?? null;
 
         if (token && typeof token === 'string') {
-            return this._ws.connect(token);
+            this._ws.connect(token);
+            this.rest = new RESTManager(this);
+            return;
         } else {
             //Error
         }
@@ -158,7 +162,7 @@ export default class Client extends EventEmitter {
         const guild = this.guilds.get(ID);
         for (let member of members) {
             await this.fetchUser(member.id)
-            guild?.members.set(member.id, new Member(this, member, guild));
+            guild?.members.set(member.id, new Member(this, member));
         }
     }
 

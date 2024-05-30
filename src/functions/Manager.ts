@@ -1,5 +1,5 @@
 import { Command, ManagerEvents, KeyTypes, Event } from '@typings';
-import { Storage } from 'lib/index';
+import { Storage } from '@lib/index';
 import Emitter from 'events';
 import * as fs from 'fs-extra';
 

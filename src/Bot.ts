@@ -1,8 +1,8 @@
 import { BotOptions } from '@typings';
-import { Manager } from 'lib/index';
+import Manager from './functions/Manager';
 import { Client } from 'discord.js';
 import DatabaseClient from 'src/Database';
-import { Intents } from 'lib/utilities/Constants';
+import { Intents } from '@lib/utilities/Constants';
 import Helpers from './functions/Helpers';
 
 export default class Bot extends Client {

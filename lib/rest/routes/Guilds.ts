@@ -1,10 +1,10 @@
 import { APIGuild, GatewayGuildModifyDispatch } from 'discord-api-types/v10';
-import { Endpoints } from 'lib/utilities/Constants';
-import RESTManager from 'lib/rest/RESTManager';
-import { Client, Guild, Member, Role } from 'lib/index';
+import { Endpoints } from '@lib/utilities/Constants';
+import RESTManager from '@lib/rest/RESTManager';
+import { Client, Guild, Member, Role } from '@lib/index';
 import { request } from 'undici';
 
-export default class Guilds {
+export class Guilds {
     constructor(private client: Client, private restManager: RESTManager) {
 
     }
@@ -12,7 +12,10 @@ export default class Guilds {
     async edit(guildID: string, reason?: string) {
         await request(Endpoints.API + `/guilds/${guildID}/`, {
             method: 'PATCH',
-            headers: { ...this.restManager.headers, 'X-Audit-Log-Reason': reason },
+            headers: {
+                ...this.restManager.headers,
+                'X-Audit-Log-Reason': reason 
+            },
             body: JSON.stringify({
                 afk_channel_id: ''
             } as APIGuild)
@@ -31,7 +34,10 @@ export default class Guilds {
         for (const roleID of rolesIDs) {
             await request(Endpoints.API + `/guilds/${guildID}/members/${memberID}/roles/${roleID}`, {
                 method: 'PUT',
-                headers:  { ...this.restManager.headers, 'X-Audit-Log-Reason': reason }
+                headers:  { 
+                    ...this.restManager.headers,
+                    'X-Audit-Log-Reason': reason 
+                }
             }).catch(() => length--);
         } 
         return length;

@@ -1,4 +1,4 @@
-import { Client, Message } from 'lib/index'
+import { Client, Message } from '@lib/index'
 
 const client = new Client({});
 
@@ -9,9 +9,12 @@ client.on('connected', async () => {
 });
 
 client.on('messageReceived', async (message: Message) => {
-    if(!message.creator?.bot) {
-        message.send('Test');
-    }
+    if(message.creator?.isBot) return;
     
-    message.reactions.all();
+    message.send('Test');
+
+    
+    let f = await message.addReactions('🍡');
+
+    console.log(message.reactions);
 });

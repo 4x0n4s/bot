@@ -1,14 +1,17 @@
-import { Channels } from '@typings';
-import { APIInvite } from 'discord-api-types/v10';
-import Base from 'lib/functions/Base';
+import { Snowflake, APIInvite} from 'discord-api-types/v10';
 import { 
     Client, 
     User, 
     Guild
-} from 'lib/index';
+} from '@lib/index';
+import Base from '@lib/functions/Base';
 
-export default class Invite extends Base {
-    constructor(private client: Client, data: APIInvite) {
+export class Invite extends Base {
+
+    constructor(
+        client: Client, 
+        data: APIInvite
+    ) {
         super();
         const users = client.users;
         this.code = data.code;
@@ -18,17 +21,13 @@ export default class Invite extends Base {
         this.targetID = this.target?.ID ?? null;
         this.guild = client.guilds.get(data.guild?.id) ?? null;
         this.guildID = this.guild?.ID ?? null;
-        this.channel = client.channels.get(data.channel?.id) ?? null;
-        this.channelID = this.channel?.ID ?? null;
     }
 
     code: string;
     inviter: User | null;
-    inviterID: User['ID'] | null;
+    inviterID: Snowflake | null;
     target: User | null;
-    targetID: User['ID'] | null;
+    targetID: Snowflake | null;
     guild: Guild | null;
-    guildID: Guild['ID'] | null;
-    channel: Channels | null;
-    channelID: Channels['ID'] | null;
+    guildID: Snowflake | null;
 }

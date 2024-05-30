@@ -1,6 +1,6 @@
 export enum Endpoints {
     API = 'https://discord.com/api/v10',
-    GATEWAY = 'wss://gateway.discord.gg/?v=10&encoding=json&compress=zlib-stream',
+    GATEWAY = 'wss://gateway.discord.gg/?v=10&encoding=json',
     ATTACHEMENTS = 'https://cdn.discordapp.com',
     DISCORD = 'https://discord.com'
 }

@@ -1,11 +1,11 @@
 import { CreateMessageOptionsData } from '@typings';
 import { APIMessage } from 'discord-api-types/v10';
-import { Endpoints } from 'lib/utilities/Constants';
-import { Client, Message } from 'lib/index';
-import RESTManager from 'lib/rest/RESTManager';
+import { Endpoints } from '@lib/utilities/Constants';
+import { Client, Message } from '@lib/index';
+import RESTManager from '@lib/rest/RESTManager';
 import { request } from "undici";
 
-export default class Channels {
+export class Channels {
     constructor(private client: Client, private restManager: RESTManager) {
 
     }

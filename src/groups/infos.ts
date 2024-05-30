@@ -1,7 +1,7 @@
 import { Message, ActionRowData, MessageActionRowComponentData, User, ComponentType } from 'discord.js';
 import type { APIEmbed } from 'discord-api-types/v10';
-import { defaultColor, defaultPrefix } from 'lib/utilities/Constants';
-import { Command } from 'lib/utilities/decorators';
+import { defaultColor, defaultPrefix } from '@lib/utilities/Constants';
+import { Command } from '@lib/utilities/decorators';
 import { ListsData } from '@typings';
 
 export default class {
@@ -37,6 +37,10 @@ export default class {
                 });
                 return;
             }
+        }
+
+        switch ('') {
+
         }
 
         let page = 0;

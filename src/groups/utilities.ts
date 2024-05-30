@@ -1,6 +1,6 @@
 import type { Message, TextChannel } from 'discord.js';
 import { parseEmoji } from 'discord.js';
-import { Command } from 'lib/utilities/decorators';
+import { Command } from '@lib/utilities/decorators';
 
 export default class {
     /*
@@ -9,7 +9,7 @@ export default class {
 
     @Command({
         name: 'create',
-        arguments: [{ type: 'any', id: 'emojis' }],
+        arguments: [{ id: 'emojis',type: 'any' }],
         description: [['create', 'dd']],
         list: 'Utilities'
     })
@@ -20,20 +20,16 @@ export default class {
             message.reply('0 emojis');
             return;
         }
-
-        let guildEmojis = message.guild?.emojis;
-
+        
         let length = emojis.length;
-        console.log(emojis)
         for (const e of emojis) {
             let emoji = parseEmoji(e);
-            if(emoji?.id && !guildEmojis?.cache.find(e => e.name == emoji.name)) {
+            if(emoji?.id) {
                 const attachment = `https://cdn.discordapp.com/emojis/${emoji.id + emoji.animated ? '.gif' : '.png'}`
                 await message.guild?.emojis.create({
                     attachment, 
                     name: emoji.name
-                }).then(emoji => console.log(`Created new emoji with name ${emoji.name}!`))
-                .catch(console.error);
+                }).catch(() => length--);
             } else length--;
         }
         await message.reply(`${length} emojis created`);
@@ -55,8 +51,7 @@ export default class {
             DO UPDATE SET logsID = excluded.logsID;
         `).run(message.guild?.id as string, channel.id);
 
-        let reply = (t: string) => translate(t) // #length, #reason
-            .replaceAll('#channel', `${channel}`)
-        message.reply(reply('setStarBoardsChannel'));
+        message.reply(translate('setStarBoardsChannel')
+            .replaceAll('#channel', `${channel}`));
     }
 }   

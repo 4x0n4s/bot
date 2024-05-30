@@ -1,13 +1,14 @@
-import { Client } from 'lib/index';
-import { Messages, Guilds, Users, Channels, Emojis } from 'lib/rest/routes/index';
+import { Client } from '@lib/index';
+import { Messages, Guilds, Users, Channels, Emojis } from '@lib/rest/routes/index';
 
 export default class RESTManager {
-    headers = {
-        'Authorization': `Bot ${this.client.token}`,
-        'Content-Type': 'application/json'
-    }
+    headers;
     
     constructor(private client: Client) {
+        this.headers = {
+            'Authorization': `Bot ${client.token}`,
+            'Content-Type': 'application/json'
+        }
         this.messages = new Messages(client, this);
         this.guilds = new Guilds(client, this);
         this.users = new Users(client, this);

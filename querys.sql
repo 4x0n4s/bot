@@ -9,6 +9,16 @@ helpers (
 
 CREATE TABLE 
 IF NOT EXISTS 
+permissions (
+    guildID TEXT,
+    roleID TEXT,
+    userID TEXT,
+    commandIdentifier TEXT,
+    perm INT
+);
+
+CREATE TABLE 
+IF NOT EXISTS 
 sanctions (
     ID INTEGER PRIMARY KEY,
     sanction TEXT,
@@ -33,4 +43,12 @@ starboards (
     channelID TEXT,
     messageID TEXT,
     targetID TEXT
+);
+
+CREATE TABLE 
+IF NOT EXISTS 
+blacklist (
+    userID TEXT,
+    authorID TEXT,
+    reason TEXT
 );

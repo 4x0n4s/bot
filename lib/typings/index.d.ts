@@ -1,6 +1,8 @@
+export * from '@typings/jsdocs';
+export * from '@typings/raw';
 import { APIEmbed, APIActionRowComponent, APIMessageActionRowComponent } from 'discord-api-types/v10';
 import { ClientEvents } from 'discord.js';
-import { Message, TextChannel, Guild } from 'lib/index';
+import { Message, TextChannel, Guild } from '@lib/index';
 
 
 export type KeyTypes = string | undefined | null;
@@ -33,15 +35,15 @@ export interface MessageReference {
 
 export interface CreateMessageOptionsData {
     content: string,
-    embeds: APIEmbed | APIEmbed[];
+    embeds?: APIEmbed | APIEmbed[];
     messageReference: MessageReference,
-    rows: ActionRow<MessageActionRowComponent>[]
+    rows?: ActionRow<MessageActionRowComponent>[]
 }
 
 export interface CreateMessageReplyOptionsData {
     content: string,
-    embeds: APIEmbed | APIEmbed[];
-    rows: ActionRow<MessageActionRowComponent>[]
+    embeds?: APIEmbed | APIEmbed[] = undefined;
+    rows?: ActionRow<MessageActionRowComponent>[] = undefined;
 }
 
 export interface EditGuildOptions {
@@ -136,6 +138,7 @@ export type CommandArgumentsTypesData = typeof CommandArgumentsTypes
     | 'user' 
     | 'role'
     | 'channel'
+    | 'notParsed'
 
 export enum CommandArgumentsTypes {
     String = 'string',
@@ -191,4 +194,12 @@ export interface StarBoardsData {
 export interface StarBoardConfigData {
     logsID: string,
     guildID: string
+}
+
+export interface PermissionsData {
+    userID: string,
+    roleID: string,
+    guildID: string,
+    commandIdentifier: string,
+    perm: number
 }
