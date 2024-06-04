@@ -1,10 +1,10 @@
 import { ButtonCollectorType } from '@lib/typings';
-import { Client } from '@lib/index';
+import { Client, Message } from '@lib/index';
 
-type ButtonInteraction = any;
+type ButtonInteraction = Message;
 export default class ButtonCollector implements ButtonCollectorType {
     private _client: Client;
-    private callback!: (interaction: ButtonInteraction) => this;
+    private callback!: (interaction: ButtonInteraction) => void;
     customsIDs: array;
     usersIDs: array;
     autoUpdate: boolean;
@@ -23,12 +23,12 @@ export default class ButtonCollector implements ButtonCollectorType {
         this.autoUpdate = autoUpdate;
     }
     
-    setCallback(fn: (interaction: ButtonInteraction) => this): this {
+    setCallback(fn: (interaction: ButtonInteraction) => void): this {
         this.callback = fn;
         return this;
     }
     
-    private handleInteraction(interaction: any) {
+    private async handleInteraction(interaction: any) {
         if(!this.callback) {
             return;
         }
@@ -43,3 +43,11 @@ export default class ButtonCollector implements ButtonCollectorType {
         }
     }
 }
+
+//@ts-ignore
+new ButtonCollector(Main, {
+    customsIDs: ['customID1', 'customID2'],
+    usersIDs: '123456789', // ['']
+}).setCallback(interaction => {
+    //Callback
+});

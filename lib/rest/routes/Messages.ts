@@ -17,6 +17,7 @@ export class Messages {
     async addReactions(message: Message, emojis: Emoji[] | StandardEmoji[]) {
         let length = emojis.length;
         for (const emoji of emojis) {
+            console.log(emoji)
             let req = await request(Endpoints.API + `/channels/${message.channelID}/messages/${message.ID}/reactions/${typeof emoji == 'object' ? `${emoji.name}:${emoji.ID}` : encodeURIComponent(emoji)}/@me`, {
                 method: 'PUT',
                 headers: this.restManager.headers

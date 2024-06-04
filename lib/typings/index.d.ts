@@ -169,7 +169,7 @@ export interface HelperData {
     ID: number,
     botID?: string,
     token?: string,
-    helperName: string
+    helperName?: string
 }
 
 export interface HelperUpdateData {

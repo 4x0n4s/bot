@@ -1,1 +1,1 @@
-export * from './functions/Application'
+export * from './functions/ButtonCollector'

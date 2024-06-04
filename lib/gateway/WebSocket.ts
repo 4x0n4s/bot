@@ -1,6 +1,6 @@
 import { } from 'discord-api-types/v10';
 import { Endpoints, Intents } from '@lib/utilities/Constants';
-import { Client, Storage, ClientUser, Message } from '@lib/index';
+import { Client, ClientUser, Message } from '@lib/index';
 import WebSocket, { OPEN } from 'ws';
 
 export default class extends WebSocket {
@@ -15,19 +15,17 @@ export default class extends WebSocket {
           
         this.on('message', async message => {
             const payload = JSON.parse(message.toString('utf-8'))
-            const { t, op, d } = payload;
+            const { t, op, d, s } = payload;
             
-            if(op === 10) {
+            if (op === 10) {
                 const { heartbeat_interval } = d;
-                
-                this.identify(token);
                 setInterval(() => {
                     if(this.readyState === OPEN) this.send(JSON.stringify({
                         op: 1,
                         d: null
                     }));
                 }, heartbeat_interval);
-                
+                this.identify(token);
             }
 
             if(t === 'READY') {

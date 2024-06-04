@@ -21,7 +21,8 @@ export class Role extends Base {
         this.isManaged = data.managed;
         this.isMentionable = data.managed;
     }
-    iconURL({ format  = 'PNG' }: URLFunction): string | null {
+
+    iconURL({ format = 'PNG' }: URLFunction): string | null {
         return this.icon ? Endpoints.ATTACHEMENTS + `/role-icons/${this.ID}/${this.icon}.${format.toLowerCase()}` : null;
     }
 

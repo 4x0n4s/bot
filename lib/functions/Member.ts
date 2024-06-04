@@ -9,7 +9,7 @@ import Base from '@lib/functions/Base';
 
 export class Member extends Base {
     constructor(
-        private client: Client, 
+        client: Client, 
         data: APIGuildMember
     ) {
         super();

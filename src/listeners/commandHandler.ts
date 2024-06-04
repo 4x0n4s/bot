@@ -1,8 +1,7 @@
 import type { Translations, Command, PermissionsData } from '@typings';
-import { Message } from 'discord.js';
+import { Message, MessageActivityType } from 'discord.js';
 import { Event } from '@decorators';
 import { defaultPrefix, defaultLang } from '@lib/utilities/Constants';
-import * as Converters from '@lib/utilities/Converters';
 import * as fs from 'fs-extra';
 import * as yml from 'yaml';
 
@@ -48,33 +47,48 @@ export default class {
         c.callback(message, commandArgs, translate);
     }
 
-    parseArguments(c: Command, message: Message, args: string[]) {
+    parseArguments(c: Command, message: Message, args: string[]): Record<string, unknown> {
         const commandArgs: Record<string, unknown> = {};
-        c.arguments.forEach(arg => {
+        
+        for (const arg of c.arguments) {
+            let value: unknown;
+
             switch (arg.type) {
-                case 'channel':
-                    commandArgs[arg.id] = !arg.array ? Converters.parseChannels(message) : Converters.parseChannels(message)[0];
+                case 'string':
+                    value = args.filter(str => !str.includes('@') ?? !str.includes(',')).join(' ');
                     break;
-                case 'role':
-                    commandArgs[arg.id] = !arg.array ? Converters.parseRoles(message) : Converters.parseRoles(message)[0];
+                case 'number':
+                    value = args.map(val => parseFloat(val)).find(val => !isNaN(val));
+                    break;
+                case 'boolean':
+                    value = args.map(val => val === 'true' ? true : val === 'false' ? false : null).find(val => val !== null);
                     break;
                 case 'user':
-                    commandArgs[arg.id] = !arg.array ? Converters.parseUsers(message) : Converters.parseUsers(message)[0];
+                    let clientUsers = Main.users.cache;
+                    value = !arg.array ? message.mentions.users.first() ?? message.mentions.repliedUser ?? clientUsers.find(user => user.username.includes(args[0])) ?? clientUsers.get(args[0])
+                        : [...new Set([...message.mentions.users.values(), ...args.map(ID => clientUsers.get(ID) || clientUsers.find(user => user.username.includes(ID))).filter(Boolean)])];
+                    break;
+                case 'channel':
+                    let guildChannels = message.guild?.channels.cache;
+                    value = !arg.array ? message.mentions.channels.first() ?? guildChannels?.find(channel => channel.name.includes(args[0])) ?? guildChannels?.get(args[0])
+                        : [...new Set([...message.mentions.channels.values(), ...args.map(ID => guildChannels?.get(ID) || guildChannels?.find(channel => channel.name.includes(ID))).filter(Boolean)])];
+                    break;
+                case 'role':
+                    let guildRoles = message.guild?.roles.cache;
+                    value = !arg.array ? message.mentions.roles.first() ?? guildRoles?.find(role => role.name.includes(args[0])) ?? guildRoles?.get(args[0])
+                        : [...new Set([...message.mentions.roles.values(), ...args.map(ID => guildRoles?.get(ID) || guildRoles?.find(role => role.name.includes(ID))).filter(Boolean)])];
                     break;
                 case 'any':
-                    commandArgs[arg.id] = args.join('').split(',');
+                    value = args.join('').split(',');
                     break;
-                case 'any':
-                    commandArgs[arg.id] = args.join('').split(',');
-                    break;
-                case 'string':
-                    commandArgs[arg.id] = args.splice(args.findLastIndex(str => str.includes(','))).join('');
-                    break;
-                case 'notParsed':
-                    commandArgs[arg.id] = args.splice(args.findLastIndex(str => str.includes(',')));
+                default:
+                    value = args.shift();
                     break;
             }
-        });
+            args = args.slice(Array.isArray(value) ? value.length : 1);
+            commandArgs[arg.id] = value;
+        }
         return commandArgs;
     }
+    
 }

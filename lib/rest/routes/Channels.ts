@@ -22,10 +22,7 @@ export class Channels {
                     guild_id: options.messageReference.guildID
                 }
             }),
-            headers: {
-                'Authorization': `Bot ${this.client.token}`,
-                'Content-Type': 'application/json'
-            }
+            headers: this.restManager.headers
         });
     }
 }

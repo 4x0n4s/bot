@@ -18,7 +18,7 @@ export class TeamMember extends Base {
         this.teamID = data.team_id;
         this.role = data.role;
         this.isAccepted = data.membership_state === 2;
-        this.isInvited = data.membership_state=== 1; 
+        this.isInvited = data.membership_state === 1; 
     }
     
     user: User;

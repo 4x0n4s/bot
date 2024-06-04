@@ -34,19 +34,6 @@ export class Message extends Base {
         this.channel = new TextChannel(client, '' as any)
         this.reactions = data.reactions?.map(reaction => new Reaction(client, reaction)) ?? [];
     }
-    
-    async send(content: string) {
-        await request(Endpoints.API + `/channels/${this.channelID}/messages`, {
-            method: 'POST',
-            body: JSON.stringify({
-                content,
-            }),
-            headers: {
-                'Authorization': `Bot ${this._client.token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-    }
 
     async createReply(options: CreateMessageReplyOptionsData) {
         await this._client.rest.channels.createMessage(this, {
@@ -63,6 +50,7 @@ export class Message extends Base {
         if(!Array.isArray(emojis)) emojis = [emojis] as Emoji[];
         return await this._client.rest.messages.addReactions(this, emojis);
     }
+    
     async removeReactions(emojis: Emoji[] | StandardEmoji[] | Emoji | StandardEmoji) {
         if(!Array.isArray(emojis)) emojis = [emojis] as Emoji[];
         return await this._client.rest.messages.removeReactions(this, emojis);

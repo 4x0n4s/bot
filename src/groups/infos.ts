@@ -1,7 +1,7 @@
 import { Message, ActionRowData, MessageActionRowComponentData, User, ComponentType } from 'discord.js';
 import type { APIEmbed } from 'discord-api-types/v10';
 import { defaultColor, defaultPrefix } from '@lib/utilities/Constants';
-import { Command } from '@lib/utilities/decorators';
+import { Command } from '@lib/decorators';
 import { ListsData } from '@typings';
 
 export default class {
@@ -37,10 +37,6 @@ export default class {
                 });
                 return;
             }
-        }
-
-        switch ('') {
-
         }
 
         let page = 0;
@@ -132,16 +128,14 @@ export default class {
                 .catch(() => user = message.author);
         }
 
-        let embed: APIEmbed = {
+        let embeds: APIEmbed[] = [{
             title: `${user.globalName} avatar's`,
             image: { 
                 url: user.avatarURL({ extension: 'png' }) as string
             },
             color: defaultColor
-        }
+        }];
 
-        message.reply({
-            embeds: [embed]
-        });
+        message.reply({ embeds });
     }
 }   

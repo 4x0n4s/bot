@@ -15,18 +15,10 @@ import {
 import Base from '@lib/functions/Base';
 
 export class Guild extends Base {
-    ID: string | null;
-    name: string;
-    description: string | null;
-    icon: string | null;
-    banner: string | null;
-    premiumTier: number;
-    channels: Storage<KeyTypes, any> = new Storage();
-    members: Storage<KeyTypes, Member> = new Storage();;
-    roles: Storage<KeyTypes, Role> = new Storage();;
-    emojis: Storage<KeyTypes, Emoji> = new Storage();;
-    bans: Storage<KeyTypes, Emoji> = new Storage();;
-    constructor (private client: Client, data: APIGuild) {
+    constructor (
+        private client: Client, 
+        data: APIGuild
+    ) {
         super();
         this.ID = data.id;
         this.name = data.name;
@@ -34,6 +26,11 @@ export class Guild extends Base {
         this.icon = data.icon
         this.banner = data.banner;
         this.premiumTier = data.premium_tier.valueOf();
+        this.channels = new Storage();
+        this.members = new Storage();
+        this.roles = new Storage();
+        this.emojis = new Storage();
+        this.bans = new Storage();
     }
 
     iconURL({ format = 'PNG' }: URLFunction): string | null {
@@ -51,4 +48,15 @@ export class Guild extends Base {
         if(!Array.isArray(emojis)) emojis = [emojis] as CreateEmojiOptions[];
         return this.client.rest.emojis.create(this, emojis, reason);
     }
+    ID: string | null;
+    name: string;
+    description: string | null;
+    icon: string | null;
+    banner: string | null;
+    premiumTier: number;
+    channels: Storage<KeyTypes, any>;
+    members: Storage<KeyTypes, Member>;
+    roles: Storage<KeyTypes, Role>;
+    emojis: Storage<KeyTypes, Emoji>;
+    bans: Storage<KeyTypes, Emoji>;
 }

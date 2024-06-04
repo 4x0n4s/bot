@@ -6,3 +6,5 @@ test.db
 tsconfig.json
 package-lock.json
 *.log
+datas.db-shm
+datas.db-wal

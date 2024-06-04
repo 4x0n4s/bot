@@ -1,14 +1,5 @@
 CREATE TABLE 
 IF NOT EXISTS 
-helpers (
-    ID INTEGER PRIMARY KEY,
-    botID TEXT,
-    helperName TEXT,
-    token TEXT UNIQUE
-);
-
-CREATE TABLE 
-IF NOT EXISTS 
 permissions (
     guildID TEXT,
     roleID TEXT,

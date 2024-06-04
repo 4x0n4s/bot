@@ -1,11 +1,28 @@
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, TextChannel } from 'discord.js';
 import { Member } from '@lib/index';
-import { Command } from '@lib/utilities/decorators';
+import { Command } from '@decorators';
 
 export default class {
     /*
     [Mods Commands]
     */
+
+    @Command({
+        name: 'clear',
+        arguments: [{ id: 'number', type: 'number' }], 
+        description: [['clear <number>', 'Delete messages in a channel']],
+        list: 'Moderation'
+    })
+    clear(message: Message, args: { number: number }, translate: (t: string) => string) {
+        const { channel } = message;
+        const { number } = args;
+
+        if(channel instanceof TextChannel) {
+           channel.bulkDelete(number);
+        }
+        
+    } 
+
     @Command({
         name: 'clear sanctions',
         arguments: [{ id: 'member', type: 'member' }], 
@@ -132,12 +149,11 @@ export default class {
         this.addSanction('Warn', member.id, message.author.id, message.guild?.id as string, reason);
     }
 
-    //Customs functions
     addSanction(sanction: string, memberID: string, authorID: string, guildID: string, reason: string) {
-        let data = Object.values({ sanction, memberID, authorID, guildID, reason, date: performance.now() });
+        let data = { sanction, memberID, authorID, guildID, reason, date: performance.now() };
         databaseClient.prepare(`
             INSERT INTO sanctions (sanction, memberID, authorID, guildID, reason, date) VALUES (?, ?, ?, ?, ?, ?);
-        `).run(...data);
-        redisClient.hSet(`sanctions/${guildID}/${memberID}`, data);
+        `).run(...Object.values(data));
+        //redisClient.set(`sanctions/${guildID}/${memberID}`, Object.entries(data).toString());
     }
 }   

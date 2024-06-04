@@ -8,7 +8,10 @@ import {
 import Base from '@lib/functions/Base';
 
 export class Team extends Base {
-    constructor(private client: Client, data: APITeam) {
+    constructor(
+        client: Client, 
+        data: APITeam
+    ) {
         super();
         this.ID = data.id;
         this.name = data.name;

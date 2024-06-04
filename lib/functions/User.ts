@@ -1,8 +1,8 @@
 import { URLFunction } from '@typings';
 import { APIUser } from 'discord-api-types/v10';
 import { Endpoints } from '@lib/utilities/Constants';
-import Base from '@lib/functions/Base';
 import { Client } from '@lib/index';
+import Base from '@lib/functions/Base';
 
 export class User extends Base {
     constructor(

@@ -1,6 +1,6 @@
 import type { Message, TextChannel } from 'discord.js';
 import { parseEmoji } from 'discord.js';
-import { Command } from '@lib/utilities/decorators';
+import { Command } from '@decorators';
 
 export default class {
     /*
@@ -9,13 +9,14 @@ export default class {
 
     @Command({
         name: 'create',
-        arguments: [{ id: 'emojis',type: 'any' }],
+        arguments: [{ id: 'emojis', type: 'any' }],
         description: [['create', 'dd']],
         list: 'Utilities'
     })
     async create_emoji(message: Message, args: { emojis: string[] }, translate: (t: string) => string) {
         let { emojis } = args;
-
+        console.log(emojis)
+        
         if(emojis.length === 0) {
             message.reply('0 emojis');
             return;
