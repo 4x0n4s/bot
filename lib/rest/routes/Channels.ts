@@ -1,17 +1,16 @@
 import { CreateMessageOptionsData } from '@typings';
-import { APIMessage } from 'discord-api-types/v10';
-import { Endpoints } from '@lib/utilities/Constants';
-import { Client, Message } from '@lib/index';
-import RESTManager from '@lib/rest/RESTManager';
+import { Endpoints } from 'lib/Constants';
+import { Client, Message } from 'lib/index';
+import RESTManager from 'lib/rest/RESTManager';
 import { request } from "undici";
 
 export class Channels {
-    constructor(private client: Client, private restManager: RESTManager) {
-
-    }
+    constructor(
+        private restManager: RESTManager
+    ) {}
 
     async createMessage(message: Message, options: CreateMessageOptionsData) {
-        let { ID, channelID, guildID } = message;
+        let { channelID } = message;
         await request(Endpoints.API + `/channels/${channelID}/messages`, {
             method: 'POST',
             body: JSON.stringify({

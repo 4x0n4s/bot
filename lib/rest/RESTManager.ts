@@ -1,5 +1,5 @@
-import { Client } from '@lib/index';
-import { Messages, Guilds, Users, Channels, Emojis } from '@lib/rest/routes/index';
+import { Client } from 'lib/index';
+import { Messages, Guilds, Users, Channels, Emojis } from 'lib/rest/routes/index';
 
 export default class RESTManager {
     headers;

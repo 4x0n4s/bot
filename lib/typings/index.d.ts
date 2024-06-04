@@ -1,8 +1,10 @@
 export * from '@typings/jsdocs';
 export * from '@typings/raw';
+export * from '@typings/bot';
+
 import { APIEmbed, APIActionRowComponent, APIMessageActionRowComponent } from 'discord-api-types/v10';
 import { ClientEvents } from 'discord.js';
-import { Message, TextChannel, Guild } from '@lib/index';
+import type { Message, TextChannel, Guild } from 'lib/index';
 
 
 export type KeyTypes = string | undefined | null;
@@ -11,7 +13,6 @@ export type OSs = 'Linux' | 'Discord IOS' | 'Discord Android';
 export type ImageFormats = 'JPG' | 'PNG' | 'WEDP' | 'GIF';
 
 export type Emoji = string;
-export type Text = string;
 
 export interface ClientSettings {
     token?: string,
@@ -20,12 +21,6 @@ export interface ClientSettings {
         OS: OSs
     }
 }
-export interface BotOptions {
-    token: string,
-    dev: string,
-}
-
-
 
 export interface MessageReference {
     messageID: string,
@@ -73,12 +68,6 @@ export interface URLFunction {
     format?: ImageFormats
 }
 
-export type Languages = 'fr' | 'en';
-export type Translations = {
-    [key: string]: string
-}
-
-
 export type CollectorInteractions = '';
 export interface CollectorSettings {
     time?: number | null;
@@ -90,116 +79,9 @@ export interface CollectorEvents {
 	end(collected, reason): any;
 }
 
-export interface ManagerEvents {
-    commandExecuted: [];
-}
-
 export interface Events extends ClientEvents {
     connected: [];
     messageReceived: [message: Message];
     guildChannelCreate: [];
 
-}
-
-
-
-
-
-
-
-export type Command = CommandConstructorOptions & { 
-    callback: Function
-};
-
-export interface Event {
-    eventName: string,
-    callback: Function
-};
-
-export interface CommandConstructorOptions {
-    name: string,
-    arguments: CommandArgumentsData[],
-    description: [string, string][],
-    list: ListsData,
-    forceUpdate?: boolean
-};
-export interface CommandArgumentsData {
-    id: string,
-    type: CommandArgumentsTypesData,
-    array?: boolean,
-    required?: boolean
-}
-export type CommandArgumentsTypesData = typeof CommandArgumentsTypes 
-    | 'any'
-    | 'string'
-    | 'boolean' 
-    | 'number' 
-    | 'member' 
-    | 'user' 
-    | 'role'
-    | 'channel'
-    | 'notParsed'
-
-export enum CommandArgumentsTypes {
-    String = 'string',
-    Boolean = 'boolean',
-    Number ='number',
-    Member = 'member',
-    User = 'user',
-    Role = 'role',
-    Channel = 'channel',
-}
-
-export type ListsData = 
-    | 'Test'
-    | 'Moderation'
-    | 'Protection'
-    | 'Utilities'
-    | 'Information'
-    | 'Logs'
-    | 'Economy'
-
-export enum Lists {
-    Test = 'test',
-    Moderation = 'Moderation',
-    Utilities = 'Utilities'
-}
-
-export interface HelperData {
-    ID: number,
-    botID?: string,
-    token?: string,
-    helperName?: string
-}
-
-export interface HelperUpdateData {
-    botID?: string,
-    token?: string,
-    helperName: string
-}
-
-export interface BlackListData {
-    userID: string,
-    authorID: string,
-    reason: string
-}
-
-export interface StarBoardsData {
-    messageID: string,
-    channelID: string,
-    guildID: string,
-    targetID: string
-}
-
-export interface StarBoardConfigData {
-    logsID: string,
-    guildID: string
-}
-
-export interface PermissionsData {
-    userID: string,
-    roleID: string,
-    guildID: string,
-    commandIdentifier: string,
-    perm: number
 }

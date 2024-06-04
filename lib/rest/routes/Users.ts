@@ -1,7 +1,7 @@
 import { } from 'discord-api-types/v10';
-import { Endpoints } from '@lib/utilities/Constants';
-import { Client } from '@lib/index';
-import RESTManager from '@lib/rest/RESTManager';
+import { Endpoints } from 'lib/Constants';
+import { Client } from 'lib/index';
+import RESTManager from 'lib/rest/RESTManager';
 import { request } from "undici";
 
 export class Users {

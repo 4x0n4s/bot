@@ -1,7 +1,7 @@
 import { APIGuild, GatewayGuildModifyDispatch } from 'discord-api-types/v10';
-import { Endpoints } from '@lib/utilities/Constants';
-import RESTManager from '@lib/rest/RESTManager';
-import { Client, Guild, Member, Role } from '@lib/index';
+import { Endpoints } from 'lib/Constants';
+import RESTManager from 'lib/rest/RESTManager';
+import { Client, Guild, Member, Role } from 'lib/index';
 import { request } from 'undici';
 
 export class Guilds {

@@ -10,6 +10,7 @@ declare global {
     var Main: Bot;
     var databaseClient: databaseClient;
     var redisClient: typeof redisClient
-    type array = string[];
-    type Snowflake = DiscordAPITypes.Snowflake
+    type array<T = string> = T[];
+    type Snowflake = DiscordAPITypes.Snowflake;
+    type Text = string;
 }

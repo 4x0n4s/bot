@@ -1,8 +1,8 @@
 import { BotOptions } from '@typings';
 import Manager from './functions/Manager';
 import { Client } from 'discord.js';
-import databaseClient from 'src/Database';
-import { Intents } from '@lib/utilities/Constants';
+import DatabaseClient from 'src/Database';
+import { Intents } from 'lib/Constants';
 
 export default class Bot extends Client {
     constructor (private botOptions: BotOptions) {
@@ -18,6 +18,6 @@ export default class Bot extends Client {
         });
     }
 
-    databaseClient!: databaseClient;
+    databaseClient!: DatabaseClient;
     manager: Manager;
 }

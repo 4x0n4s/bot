@@ -1,9 +1,9 @@
 import { CreateEmojiOptions} from '@typings';
 import { APIEmoji, APIMessage } from 'discord-api-types/v10';
-import { Endpoints } from '@lib/utilities/Constants';
-import { ImageToB64 } from '@lib/utilities/b64';
-import RESTManager from '@lib/rest/RESTManager';
-import { Client, Emoji, Guild } from '@lib/index';
+import { Endpoints } from 'lib/Constants';
+import { ImageToB64 } from 'lib/utilities/b64';
+import RESTManager from 'lib/rest/RESTManager';
+import { Client, Emoji, Guild } from 'lib/index';
 import { request } from "undici";
 
 export class Emojis {

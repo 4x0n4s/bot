@@ -1,5 +1,5 @@
 import { APIApplication } from 'discord-api-types/v10';
-import { Client, Team, User } from '@lib/index';
+import { Client, Team, User } from 'lib/index';
 
 export interface ClientType {
     /** Connects the client*/

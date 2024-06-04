@@ -1,7 +1,7 @@
 import type { Translations, Command, PermissionsData } from '@typings';
 import { Message, MessageActivityType } from 'discord.js';
 import { Event } from '@decorators';
-import { defaultPrefix, defaultLang } from '@lib/utilities/Constants';
+import { defaultPrefix, defaultLang } from 'lib/Constants';
 import * as fs from 'fs-extra';
 import * as yml from 'yaml';
 

@@ -1,7 +1,7 @@
 import { Message, ActionRowData, MessageActionRowComponentData, User, ComponentType } from 'discord.js';
 import type { APIEmbed } from 'discord-api-types/v10';
-import { defaultColor, defaultPrefix } from '@lib/utilities/Constants';
-import { Command } from '@lib/decorators';
+import { defaultColor, defaultPrefix } from 'lib/Constants';
+import { Command } from 'lib/decorators';
 import { ListsData } from '@typings';
 
 export default class {

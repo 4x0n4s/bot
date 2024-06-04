@@ -2,7 +2,7 @@ import type { User, MessageReaction, TextChannel, Message } from 'discord.js';
 import { Event } from '@decorators';
 import { StarBoardsData, StarBoardConfigData } from '@typings';
 
-import { defaultColor } from '@lib/utilities/Constants';
+import { defaultColor } from 'lib/Constants';
 
 export default class {
     //StarBoards

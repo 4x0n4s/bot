@@ -1,4 +1,4 @@
-import { Client, Message } from '@lib/index'
+import { Client, Message } from 'lib/index'
 
 const client = new Client({
     properties: {

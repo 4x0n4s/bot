@@ -1,5 +1,5 @@
 import { GuildMember, Message, TextChannel } from 'discord.js';
-import { Member } from '@lib/index';
+import { Member } from 'lib/index';
 import { Command } from '@decorators';
 
 export default class {

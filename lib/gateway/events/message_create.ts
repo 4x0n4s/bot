@@ -1,5 +1,5 @@
 import { RawAPIMessage } from '@typings/raw'
-import { Client, Message } from '@lib/index';
+import { Client, Message } from 'lib/index';
 import { APIMessage } from 'discord-api-types/v10';
 
 export default function (client: Client, d: RawAPIMessage) {
