@@ -18,7 +18,7 @@ export default class {
         const { number } = args;
 
         if(channel instanceof TextChannel) {
-           channel.bulkDelete(number);
+            channel.bulkDelete(number + 1);
         }
         
     } 
