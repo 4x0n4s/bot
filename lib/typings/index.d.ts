@@ -6,6 +6,22 @@ import { APIEmbed, APIActionRowComponent, APIMessageActionRowComponent } from 'd
 import { ClientEvents } from 'discord.js';
 import type { Message, TextChannel, Guild } from 'lib/index';
 
+export interface BasicCacheFunctions {
+    async set(cacheName: string, key: string, value: string): void | Promise<void>;
+    async get(cacheName: string, ...key: string[]): array | Promise<string | null>[];
+    async clear(cacheName: string): void | Promise<void>;
+    async delete(cacheName: string, ...keys: string[]): void | Promise<void>;
+}
+
+export interface CacheFunctions<V> {
+    async set(key: string, value: string): void | Promise<void>;
+    async get(...keys: string[]): array<V | null>;
+    async clear(): void | Promise<void>;
+    async delete(...keys: string[]): void | Promise<void>;
+}
+
+export type Caches = typeof string;
+
 
 export type KeyTypes = string | undefined | null;
 

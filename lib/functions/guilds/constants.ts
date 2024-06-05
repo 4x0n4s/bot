@@ -1,0 +1,4 @@
+
+
+export const GUILD_NAME_MAX_CHARACTERS = 100;
+export const GUILD_NAME_MIN_CHARACTERS = 2;

@@ -5,9 +5,7 @@ export default class Channel {
     public readonly name: string | null;
     public readonly type: number;
 
-    constructor(
-        public data: APIChannel
-    ) {
+    constructor(data: APIChannel) {
         this.ID = data.id;
         this.name = data.name;
         this.type = data.type;

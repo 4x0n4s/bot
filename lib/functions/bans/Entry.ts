@@ -5,9 +5,7 @@ export default class BanEntry {
     public readonly user: User;
     public readonly reason: string | null;
 
-    constructor(
-        public data: APIBan
-    ) {
+    constructor(data: APIBan) {
         this.user = new User(data.user);
         this.reason = data.reason;
     }

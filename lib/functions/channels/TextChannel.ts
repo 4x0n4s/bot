@@ -8,19 +8,16 @@ export default class TextChannel extends Channel {
     public readonly lastMessageID: Snowflake | null;
     public readonly isNsfw: boolean;
     public readonly cooldown: number;
-    public readonly messages: Storage<KeyTypes, Message>;
+    public readonly messages: Storage<Message>;
 
-    constructor(
-        client: Client, 
-        public data: APITextChannel
-    ) {
+    constructor(client: Client, data: APITextChannel) {
         super(data);
         this.ID = data.id;
         this.guild = client.guilds.get(data.guild_id) ?? null;
         this.lastMessageID = data.last_message_id ?? null;
         this.isNsfw = data.nsfw ?? false;
         this.cooldown = data.rate_limit_per_user ?? 0;
-        this.messages = new Storage();
+        this.messages = new Storage(client, `messages:${this.ID}`, TextChannel);
     }
 
 

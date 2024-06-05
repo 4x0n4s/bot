@@ -2,6 +2,7 @@ import {
     KeyTypes,
     ClientSettings,
     Events,
+    BasicCacheFunctions,
     ClientType
 } from '@typings';
 import { Endpoints } from 'lib/Constants';
@@ -10,6 +11,7 @@ import { WebSocket } from "lib/gateway/ws/index";
 import { Storage, ClientUser, User, Guild, Member, Message, TextChannel } from 'lib/index';
 import EventEmitter from 'events';
 import { request } from 'undici';
+import { APIUser } from 'discord-api-types/v10';
 
 export class Client extends EventEmitter implements ClientType {
     private _ws: WebSocket = new WebSocket(this);
@@ -17,13 +19,16 @@ export class Client extends EventEmitter implements ClientType {
     rest!: RESTManager;
     token!: string | null;
     isReady: boolean = false;
-    guilds: Storage<KeyTypes, Guild> = new Storage();
-    users: Storage<KeyTypes, User> = new Storage();
-    channels: Storage<KeyTypes, any> = new Storage();
-
+    guilds: Storage<Guild>;
+    users: Storage<User>;
+    channels: Storage<any>;
+    cache!: BasicCacheFunctions;
 
     constructor(public settings: ClientSettings) {
         super();
+        this.guilds = new Storage(this, 'guilds', Guild);
+        this.users = new Storage(this, 'guilds', Guild);
+        this.channels = new Storage(this, 'guilds', Guild);
     }
 
     connect(token?: string) {
@@ -79,7 +84,7 @@ export class Client extends EventEmitter implements ClientType {
             });
 
             u = await u.body.json();
-            this.users.set(user.id, new User(u));
+            this.users.set(user.id, u);
         } 
     }
 
@@ -92,8 +97,8 @@ export class Client extends EventEmitter implements ClientType {
             }
         });
 
-        const user = await body.json() as any;
-        this.users.set(user.id, new User(user));
+        const user = await body.json() as APIUser;
+        this.users.set(user.id, JSON.stringify(user));
     } 
 
     async fetchGuilds() {
@@ -116,7 +121,7 @@ export class Client extends EventEmitter implements ClientType {
             });
 
             server = await server.body.json();
-            this.guilds.set(guild.id, new Guild(this, server));
+            this.guilds.set(guild.id, server);
             await this.fetchGuildChannels(guild.id);
             await this.fetchGuildMembers(guild.id);
         } 
@@ -132,12 +137,13 @@ export class Client extends EventEmitter implements ClientType {
         });
 
         const channels = await body.json() as any[];
-        const guild = this.guilds.get(ID);
+        const guild = this.guilds.get(ID)[0];
         for (const channel of channels) {
-            let c = new TextChannel(this, channel);  await this.fecthChannelMessages(guild?.ID as string, c); 
+            let c = new TextChannel(this, channel);  
+            await this.fecthChannelMessages(guild?.ID as string, c); 
             
-            guild?.channels.set(channel.id, c);
-            this.channels.set(channel.id, c);
+            guild?.channels.set(channel.id, channel);
+            this.channels.set(channel.id, channel);
         }
     }
 
@@ -151,10 +157,10 @@ export class Client extends EventEmitter implements ClientType {
         });
 
         const members = await body.json() as any[];
-        const guild = this.guilds.get(ID);
+        const guild = this.guilds.get(ID)[0];
         for (let member of members) {
             await this.fetchUser(member.id)
-            guild?.members.set(member.id, new Member(member));
+            guild?.members.set(member.id, member);
         }
     }
 
@@ -168,11 +174,11 @@ export class Client extends EventEmitter implements ClientType {
         });
 
         const messages = await body.json() as any[];
-        const guild = this.guilds.get(guildID);
+        const guild = this.guilds.get(guildID)[0];
         for (const message of messages) {
             let m = new Message(this, message);
-            guild?.channels.get(channel.ID)?.messages.set(message.id, m);
-            this.channels?.get(channel.ID)?.messages.set(message.id, m);
+            //guild?.channels.get(channel.ID)[0]?.messages.set(message.id, m);
+            this.channels?.get(channel.ID)[0]?.messages.set(message.id, m);
         }
     }
 

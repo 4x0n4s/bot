@@ -10,13 +10,12 @@ export default class Application implements ApplicationType {
     public readonly isPublic: boolean;
 
     constructor(
-        client: Client, 
         public data: APIApplication
     ) {
         this.ID = data.id;
         this.description = data.description;
         this.owner = data.owner ? new User(data.owner) : null;
-        this.team = data.team ? new Team(client, data.team) : null;
+        this.team = data.team ? new Team(data.team) : null;
         this.isPublic = data.bot_public;        
     }
 
@@ -24,7 +23,7 @@ export default class Application implements ApplicationType {
         return JSON.stringify(this);
     }
 
-    static fromJSON(client: Client, data: APIApplication) {
-        return new Application(client, data);
+    static fromJSON(data: APIApplication) {
+        return new Application(data);
     }
 }

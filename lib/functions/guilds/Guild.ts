@@ -1,7 +1,7 @@
-import { KeyTypes, URLFunction,CreateEmojiOptions } from '@typings';
+import { URLFunction,CreateEmojiOptions } from '@typings';
 import { APIGuild } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/Constants';
-import { Client, Storage, Member, Emoji, Role } from 'lib/index';
+import { Client, Storage, Member, Emoji, Role, Channel, BanEntry } from 'lib/index';
 
 export default class Guild {
     private _client: Client;
@@ -11,11 +11,11 @@ export default class Guild {
     public readonly icon: string | null;
     public readonly banner: string | null;
     public readonly premiumTier: number;
-    public readonly channels: Storage<KeyTypes, any>;
-    public readonly members: Storage<KeyTypes, Member>;
-    public readonly roles: Storage<KeyTypes, Role>;
-    public readonly emojis: Storage<KeyTypes, Emoji>;
-    public readonly bans: Storage<KeyTypes, Emoji>;
+    public readonly channels: Storage<Channel>;
+    public readonly members: Storage<Member>;
+    public readonly roles: Storage<Role>;
+    public readonly emojis: Storage<Emoji>;
+    public readonly bans: Storage<BanEntry>;
 
     constructor (
         client: Client, 
@@ -28,11 +28,11 @@ export default class Guild {
         this.icon = data.icon
         this.banner = data.banner;
         this.premiumTier = data.premium_tier.valueOf();
-        this.channels = new Storage();
-        this.members = new Storage();
-        this.roles = new Storage();
-        this.emojis = new Storage();
-        this.bans = new Storage();
+        this.channels = new Storage(client, `channels:${this.ID}`, Channel);
+        this.members = new Storage(client, `members:${this.ID}`, Member);
+        this.roles = new Storage(client, `roles:${this.ID}`, Role);
+        this.emojis = new Storage(client, `emojis:${this.ID}`, Emoji);
+        this.bans = new Storage(client, `bans:${this.ID}`, BanEntry);
     }
 
     iconURL({ format = 'PNG' }: URLFunction): string | null {
