@@ -1,5 +1,5 @@
 import { URLFunction,CreateEmojiOptions } from '@typings';
-import { APIGuild } from 'discord-api-types/v10';
+import { APIGuild, APIChannel, APIGuildMember, APIRole, APIEmoji, APIBan } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/Constants';
 import { Client, Storage, Member, Emoji, Role, Channel, BanEntry } from 'lib/index';
 
@@ -11,11 +11,11 @@ export default class Guild {
     public readonly icon: string | null;
     public readonly banner: string | null;
     public readonly premiumTier: number;
-    public readonly channels: Storage<Channel>;
-    public readonly members: Storage<Member>;
-    public readonly roles: Storage<Role>;
-    public readonly emojis: Storage<Emoji>;
-    public readonly bans: Storage<BanEntry>;
+    public readonly channels: Storage<APIChannel>;
+    public readonly members: Storage<APIGuildMember>;
+    public readonly roles: Storage<APIRole>;
+    public readonly emojis: Storage<APIEmoji>;
+    public readonly bans: Storage<APIBan>;
 
     constructor (
         client: Client, 
