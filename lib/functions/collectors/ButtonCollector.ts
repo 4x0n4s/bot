@@ -1,4 +1,4 @@
-import { ButtonCollectorType } from '@typings';
+import { ButtonCollectorType, ButtonCollectorOptions } from '@typings';
 import { Client, Message } from 'lib/index';
 
 type ButtonInteraction = Message;
@@ -12,11 +12,7 @@ export default class ButtonCollector implements ButtonCollectorType {
         customsIDs = [],
         usersIDs = [],
         autoUpdate = false
-    }: {
-        customsIDs: string | array,
-        usersIDs: string | array,
-        autoUpdate?: boolean
-    }) {
+    }: ButtonCollectorOptions) {
         this._client = client;
         this.customsIDs = Array.isArray(customsIDs) ? customsIDs : [customsIDs];
         this.usersIDs = Array.isArray(usersIDs) ? usersIDs : [usersIDs];
