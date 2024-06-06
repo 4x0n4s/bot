@@ -22,6 +22,15 @@ export interface CacheFunctions<V> {
 
 export type Caches = typeof string;
 
+export interface ButtonCollectorOptions extends CollectorOptions {
+    
+}
+
+export interface CollectorOptions {
+    customsIDs: string | array<string>,
+    usersIDs: string | array<string>
+    autoUpdate?: boolean
+}
 
 export type KeyTypes = string | undefined | null;
 
