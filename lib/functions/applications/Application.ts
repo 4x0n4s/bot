@@ -9,9 +9,7 @@ export default class Application implements ApplicationType {
     public readonly team: Team | null;
     public readonly isPublic: boolean;
 
-    constructor(
-        public data: APIApplication
-    ) {
+    constructor(data: APIApplication) {
         this.ID = data.id;
         this.description = data.description;
         this.owner = data.owner ? new User(data.owner) : null;
