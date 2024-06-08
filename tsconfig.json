@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "CommonJS",
     "allowJs": true,
     "checkJs": true,
     "resolveJsonModule": true,
@@ -22,11 +22,4 @@
       "@logger": ["lib/logger/index", "lib/logger/*"]
     }
   },
-
-  "exclude": [
-    "node_modules",
-    "./node_modules",
-    "./node_modules/*",
-    "./node_modules/@types/node/index.d.ts"
-  ]
 }

@@ -17,10 +17,9 @@ export default class {
         const VoiceConnection = joinVoiceChannel({
             channelId: '1229149646644056074',
             guildId: '1223659401097773126',
-            adapterCreator: message.guild?.voiceAdapterCreator
+            adapterCreator: vfgr
         });
 
-        translate(0);
         const mp3 = createAudioResource('http://cdn.nrjaudio.fm/audio1/fr/40101/aac_576.mp3'); 
         const player = createAudioPlayer();
         VoiceConnection.subscribe(player);
@@ -30,9 +29,5 @@ export default class {
         player.on('error', (error) => {
             console.error('Erreur lors de la lecture du fichier audio :', error.message);
         });
-    VoiceConhnection.on('debug', async (e)=> {
-            console.log(new Error(e))
-        }).on('error', (e) => {
-            console.log(e)
-        });}
+    }
 }   
