@@ -17,17 +17,12 @@ export default class {
         const VoiceConnection = joinVoiceChannel({
             channelId: '1229149646644056074',
             guildId: '1223659401097773126',
-            adapterCreator: vfgr
+            adapterCreator: message.guild?.voiceAdapterCreator as any
         });
 
-        const mp3 = createAudioResource('http://cdn.nrjaudio.fm/audio1/fr/40101/aac_576.mp3'); 
+        const mp3 = createAudioResource('https://hls-bfmbusiness.nextradiotv.com/no_ssai/128k/media.m3u8'); 
         const player = createAudioPlayer();
         VoiceConnection.subscribe(player);
-
-        
         player.play(mp3);
-        player.on('error', (error) => {
-            console.error('Erreur lors de la lecture du fichier audio :', error.message);
-        });
     }
 }   
