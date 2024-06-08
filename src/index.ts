@@ -9,7 +9,3 @@ let env = dotEnvExtended.load();
 global.databaseClient = new DatabaseClient()
 //global.redisClient = redisClient
 global.Main = new Bot({ dev: env.MODE, token: env.TOKEN });
-
-process.on('unhandledRejection', async (e) => {
-    console.log(e)
-})
