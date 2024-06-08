@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "skipDefaultLibCheck": false,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "dist/",
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["./lib/*", "./lib/functions/*"],
+      "@lib": ["./lib/index"],
+      "@typings": ["./lib/typings/index"],
+      "@typings/*": ["./lib/typings/*"],
+      "@decorators": ["lib/decorators"],
+      "@logger": ["lib/logger/index", "lib/logger/*"]
+    }
+  },
+
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts"
+  ]
+}

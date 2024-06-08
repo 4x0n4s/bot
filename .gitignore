@@ -3,7 +3,6 @@ bun.lockb
 datas.db
 datas.db-sdh
 test.db
-tsconfig.json
 package-lock.json
 *.log
 datas.db-shm
