@@ -5,16 +5,13 @@ export default class BanEntry {
     public readonly user: User;
     public readonly reason: string | null;
 
-    constructor(data: APIBan) {
+    constructor(private data: APIBan) {
         this.user = new User(data.user);
         this.reason = data.reason;
     }
 
     toJSON() {
-        return JSON.stringify(this);
+        return JSON.stringify(this.data);
     }
 
-    static fromJSON(data: APIBan) {
-        return new BanEntry(data);
-    }
 }

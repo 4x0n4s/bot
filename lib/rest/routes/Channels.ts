@@ -5,11 +5,15 @@ import RESTManager from 'lib/rest/RESTManager';
 import { request } from "undici";
 
 export class Channels {
-    constructor(
-        private restManager: RESTManager
-    ) {}
+    private _client: Client;
+    constructor(client: Client) {
+        this._client = client;
+    }
 
-    async createMessage(message: Message, options: CreateMessageOptionsData) {
+    async createMessage(
+        message: Message, 
+        options: CreateMessageOptionsData
+    ) {
         let { channelID } = message;
         await request(Endpoints.API + `/channels/${channelID}/messages`, {
             method: 'POST',
@@ -21,7 +25,7 @@ export class Channels {
                     guild_id: options.messageReference.guildID
                 }
             }),
-            headers: this.restManager.headers
+            headers: this._client.rest.headers
         });
     }
 }

@@ -5,16 +5,21 @@ import RESTManager from 'lib/rest/RESTManager';
 import { request } from "undici";
 
 export class Users {
-    constructor(private client: Client, private restManager: RESTManager) {
+    private _client: Client;
+    constructor(client: Client) {
+        this._client = client;
+    }
+
+    me() {
 
     }
 
-    async leaveGuilds(guildsIDs: string[]) {
+    async leaveGuilds(guildsIDs: string[]): Promise<number> {
         let length = guildsIDs.length;
         for (const guildID  in guildsIDs) {
             await request(Endpoints.API + `/users/@me/guilds/${guildID}`, {
                 method: 'DELETE',
-                headers: this.restManager.headers
+                headers: this._client.rest.headers
             }).catch(() => length--);
         }
         return length;

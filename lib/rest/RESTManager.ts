@@ -1,19 +1,24 @@
 import { Client } from 'lib/index';
-import { Messages, Guilds, Users, Channels, Emojis } from 'lib/rest/routes/index';
+import { Messages, Guilds, Users, Channels, Emojis, Members } from 'lib/rest/routes/index';
 
 export default class RESTManager {
     headers;
-    
-    constructor(private client: Client) {
+    private token!: string;
+    constructor(client: Client) {
         this.headers = {
-            'Authorization': `Bot ${client.token}`,
+            'Authorization': `Bot ${this.token}`,
             'Content-Type': 'application/json'
         }
-        this.messages = new Messages(client, this);
-        this.guilds = new Guilds(client, this);
-        this.users = new Users(client, this);
-        this.channels = new Channels(client, this);
-        this.emojis = new Emojis(client, this);
+        this.messages = new Messages(client);
+        this.guilds = new Guilds(client);
+        this.users = new Users(client);
+        this.channels = new Channels(client);
+        this.emojis = new Emojis(client);
+        this.members = new Members(client);
+    }
+
+    setToken(token: string): void {
+        this.token = token;
     }
 
     messages: Messages;
@@ -21,4 +26,5 @@ export default class RESTManager {
     users: Users;
     channels: Channels;
     emojis: Emojis;
+    members: Members;
 }

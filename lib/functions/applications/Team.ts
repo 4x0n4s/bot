@@ -9,9 +9,7 @@ export default class Team {
     public readonly icon: string | null;
     public members: TeamMember[];
     
-    constructor(
-        public data: APITeam
-    ) {
+    constructor(private data: APITeam) {
         this.ID = data.id;
         this.name = data.name;
         this.icon = data.icon;
@@ -23,10 +21,6 @@ export default class Team {
     }
 
     toJSON() {
-        return JSON.stringify(this);
-    }
-
-    static fromJSON(data: APITeam) {
-        return new Team(data);
+        return JSON.stringify(this.data);
     }
 }

@@ -11,9 +11,7 @@ export default class User {
     public readonly isBot: boolean;
     public readonly premiumType: number | null;
 
-    constructor(
-        data: APIUser
-    ) {;
+    constructor(public data: APIUser) {
         this.ID = data.id;
         this.userName = data.username;
         this.globalUserName = data.global_name;
@@ -27,5 +25,9 @@ export default class User {
     }
     bannerURL({ format = 'PNG' }: URLFunction): string | null {
         return this.banner ? Endpoints.ATTACHEMENTS + `/avatars/${this.ID}/${this.avatar}.${format.toLowerCase()}` : null;
-    } 
+    }
+
+    toJSON() {
+        
+    }
 }

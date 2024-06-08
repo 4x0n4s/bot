@@ -10,10 +10,14 @@ export default class TextChannel extends Channel {
     public readonly cooldown: number;
     public readonly messages: Storage<Message>;
 
-    constructor(client: Client, data: APITextChannel) {
+    constructor(
+        client: Client, 
+        private data: APITextChannel
+    ) {
         super(data);
+        let guildData = data.guild_id ? client.guilds.get(data.guild_id)[0] : null;
         this.ID = data.id;
-        this.guild = client.guilds.get(data.guild_id) ?? null;
+        this.guild = guildData ? new Guild(client, guildData) ?? null : null;
         this.lastMessageID = data.last_message_id ?? null;
         this.isNsfw = data.nsfw ?? false;
         this.cooldown = data.rate_limit_per_user ?? 0;
@@ -22,10 +26,9 @@ export default class TextChannel extends Channel {
 
 
     toJSON() {
-        return JSON.stringify(this);
+        return JSON.stringify(this.data);
     }
 
-    static fromJSON(client: Client, data: APITextChannel) {
-        return new TextChannel(client, data);
-    }
+
+
 }

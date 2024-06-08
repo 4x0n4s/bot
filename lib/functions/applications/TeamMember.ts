@@ -8,7 +8,7 @@ export default class TeamMember {
     public readonly isInvited: boolean;
     public readonly isAccepted: boolean;
 
-    constructor(data: APITeamMember) {
+    constructor(private data: APITeamMember) {
         this.user = data.user ? new User(data.user) : null;
         this.teamID = data.team_id;
         this.role = data.role;
@@ -17,10 +17,7 @@ export default class TeamMember {
     }
 
     toJSON() {
-        return JSON.stringify(this);
+        return JSON.stringify(this.data);
     }
 
-    static fromJSON(data: APITeamMember) {
-        return new TeamMember(data);
-    }
 }

@@ -12,23 +12,20 @@ export default class Invite {
 
     constructor(
         client: Client, 
-        public data: APIInvite
+        private data: APIInvite
     ) {
+        let guildData = client.guilds.get(data.guild?.id as string)[0];
         this.code = data.code;
         this.inviter = data.inviter ? new User(data.inviter) : null;
         this.inviterID = this.inviter?.ID ?? null;
         this.target = data.target_user ? new User(data.target_user) : null;
-        this.targetID = this.target?.ID ?? null;
-        this.guild = client.guilds.get(data.guild?.id) ?? null;
+        this.targetID = this.target?.ID ?? null; 
+        this.guild = guildData ? new Guild(client, guildData) : null;
         this.guildID = this.guild?.ID ?? data.guild?.id ?? null;
     }
 
-
     toJSON() {
-        return JSON.stringify(this);
+        return JSON.stringify(this.data);
     }
 
-    static fromJSON(client: Client, data: APIInvite) {
-        return new Invite(client, data);
-    }
 }

@@ -19,7 +19,7 @@ export default class Guild {
 
     constructor (
         client: Client, 
-        public data: APIGuild
+        private data: APIGuild
     ) {
         this._client = client;
         this.ID = data.id;
@@ -42,22 +42,16 @@ export default class Guild {
         return this.banner ? Endpoints.ATTACHEMENTS + `/banners/${this.ID}/${this.banner}.${format.toLowerCase()}` : null;
     }
 
-    async editGuildName(name?: string, reason?: string) {
-        if(this.ID) await this._client.rest.guilds.edit('name', name);
-    }
-
-    async createEmojis(emojis: CreateEmojiOptions | CreateEmojiOptions[], reason?: string) {
+    async createEmojis(
+        emojis: CreateEmojiOptions | CreateEmojiOptions[], 
+        reason?: string
+    ) {
         if(!Array.isArray(emojis)) emojis = [emojis] as CreateEmojiOptions[];
         return this._client.rest.emojis.create(this, emojis, reason);
     }
 
-
-    // TODO
     toJSON() {
         return JSON.stringify(this.data);
     }
 
-    static fromJSON(client: Client, data: APIGuild) {
-        return new Guild(client, data);
-    }
 }

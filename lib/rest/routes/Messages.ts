@@ -6,32 +6,38 @@ import { Endpoints } from 'lib/Constants';
 import { request } from "undici";
 
 export class Messages {
-    constructor(private client: Client, private restManager: RESTManager) {
-
+    private _client: Client;
+    constructor(client: Client) {
+        this._client = client;
     }
 
     get() {
 
     }
     
-    async addReactions(message: Message, emojis: Emoji[] | StandardEmoji[]) {
+    async addReactions(
+        message: Message, 
+        emojis: Emoji[] | StandardEmoji[]
+    ): Promise<number> {
         let length = emojis.length;
         for (const emoji of emojis) {
-            console.log(emoji)
-            let req = await request(Endpoints.API + `/channels/${message.channelID}/messages/${message.ID}/reactions/${typeof emoji == 'object' ? `${emoji.name}:${emoji.ID}` : encodeURIComponent(emoji)}/@me`, {
+            await request(Endpoints.API + `/channels/${message.channelID}/messages/${message.ID}/reactions/${typeof emoji == 'object' ? `${emoji.name}:${emoji.ID}` : encodeURIComponent(emoji)}/@me`, {
                 method: 'PUT',
-                headers: this.restManager.headers
+                headers: this._client.rest.headers
             }).catch(() => length--);
         }
         return length;
     }
 
-    async removeReactions(message: Message, emojis: Emoji[] | StandardEmoji[]) {
+    async removeReactions(
+        message: Message, 
+        emojis: Emoji[] | StandardEmoji[]
+    ): Promise<number> {
         let length = emojis.length;
         for (const emoji of emojis) {
             await request(Endpoints.API + `/channels/${message.channelID}/messages/${message.ID}/reactions/${typeof emoji == 'object' ? `${emoji.name}:${emoji.ID}` : encodeURIComponent(emoji)}/@me`, {
                 method: 'DELETE',
-                headers: this.restManager.headers
+                headers: this._client.rest.headers
             }).catch(() => length--);
         }
         return length;

@@ -1,3 +1,11 @@
+export const defaultLang = 'fr';
+export const defaultPrefix = '!';
+export const defaultColor = 0x6900b9;
+
+export enum RadiosURL {
+    NRJ = 'https://cdn.nrjaudio.fm/audio1/fr/30001/aac_64.mp3?origine=playernrj'
+}
+
 export enum Endpoints {
     API = 'https://discord.com/api/v10',
     GATEWAY = 'wss://gateway.discord.gg/?v=10&encoding=json',
@@ -8,7 +16,3 @@ export enum Endpoints {
 export enum Intents {
     All = 3276799
 };
-
-export const defaultLang = 'fr';
-export const defaultPrefix = '!';
-export const defaultColor = 0x6900b9

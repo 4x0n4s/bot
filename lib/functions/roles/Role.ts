@@ -14,9 +14,7 @@ export default class Role {
     public readonly isManaged: boolean;
     public readonly isMentionable: boolean;
 
-    constructor(
-        data: APIRole
-    ) {
+    constructor(public data: APIRole) {
         this.ID = data.id;
         this.name = data.name;
         this.color = data.color;

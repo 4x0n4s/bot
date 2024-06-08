@@ -12,9 +12,7 @@ export default class Emoji {
     public readonly isManaged: boolean;
     public readonly rolesIDs: Snowflake[] | null;
 
-    constructor(
-        public data: APIEmoji
-    ) {
+    constructor(private data: APIEmoji) {
         this.ID = data.id;
         this.name = data.name;
         this.creator = data.user ? new User(data.user): null; 
@@ -32,7 +30,4 @@ export default class Emoji {
         return JSON.stringify(this.data);
     }
 
-    static fromJSON(data: APIEmoji) {
-        return new Emoji(data);
-    }
 }

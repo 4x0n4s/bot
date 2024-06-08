@@ -1,56 +1,88 @@
 import { CreateEmojiOptions} from '@typings';
 import { APIEmoji, APIMessage } from 'discord-api-types/v10';
 import { Endpoints } from 'lib/Constants';
-import { ImageToB64 } from 'lib/utilities/b64';
+//import { ImageToB64 } from 'lib/utilities/b64';
 import RESTManager from 'lib/rest/RESTManager';
 import { Client, Emoji, Guild } from 'lib/index';
-import { request } from "undici";
+import { request } from 'undici';
 
 export class Emojis {
-    constructor(private client: Client, private restManager: RESTManager) {
-
+    private _client: Client;
+    constructor(client: Client) {
+        this._client = client;
     }
 
-    async get(guild: Guild, emojiID: Emoji['ID']) {
-        if(!guild.emojis.has(emojiID)) await request(Endpoints.API + `/guilds/${guild.ID}/emojis/${emojiID}`, {
+    async get(
+        guild: Guild, 
+        emojiID: string
+    ): Promise<APIEmoji | null>{
+        let data = guild.emojis.get(emojiID)[0];
+        if(!Boolean(data)) return await request(Endpoints.API + `/guilds/${guild.ID}/emojis/${emojiID}`, {
             method: 'GET',
-            headers: this.restManager.headers,
-        })
-        else return guild.emojis.get(emojiID);
+            headers: this._client.rest.headers,
+        }).then(async ({ 
+            body, 
+            statusCode 
+        }) => {
+            if(statusCode !== 200) return null;
+            return await body.json() as APIEmoji;
+        });
+        return data ?? null;
     }
 
-    async create(guild: Guild, emojis: CreateEmojiOptions[], reason?: string) {
+    async create(
+        guild: Guild, 
+        emojis: CreateEmojiOptions[], 
+        reason?: string
+    ): Promise<{ datas: Emoji[], length: number }> {
         let length = emojis.length;
-    
+        let datas: Emoji[] = [];
         for (const emoji of emojis) {
-            let image = `data:image/png;base64,${ImageToB64(emoji.url)}`;
+            //ImageToB64(emoji.url)
+            let image = `data:image/png;base64,IMGBS64`;
             await request(Endpoints.API + `/guilds/${guild.ID}/emojis/`, {
                 method: 'POST',
-                headers: { ...this.restManager.headers, 'X-Audit-Log-Reason': reason },
+                headers: { 
+                    ...this._client.rest.headers, 
+                    'X-Audit-Log-Reason': reason 
+                },
                 body: JSON.stringify({
                     image,
                     name: emoji.name
                 })
-            }).then(async ({ body }) => {
-                let d = await body.json() as APIEmoji;
-                let emoji = new Emoji(this.client, d)
-                guild.emojis.set(emoji.ID, emoji);
-            }).catch(() => length--);
+            }).then(
+                async ({ body }) => {
+                    let d = await body.json() as APIEmoji;
+                    let emoji = new Emoji(d)
+                    guild.emojis.set(emoji.ID as string, JSON.stringify(d));
+                    datas.push(emoji);
+                }, 
+                () => length--
+            );
         }
-        return length;
+        return { datas, length };
     }
 
-    async delete(guild: Guild, emojisIDs: Emoji['ID'][], reason?: string) {
+    async delete(
+        guild: Guild, 
+        emojisIDs: array<string>, 
+        reason?: string
+    ): Promise<number> {
         let length = emojisIDs.length;
         for (const emojiID of emojisIDs) {
             await request(Endpoints.API + `/guilds/${guild.ID}/emojis/${emojiID}`, {
                 method: 'DELETE',
                 headers: { 
-                    ...this.restManager.headers,
+                    ...this._client.rest.headers,
                     'X-Audit-Log-Reason': reason 
                 },
-            }).catch(() => length--);
-            guild.emojis.delete(emojiID);
+            }).then(
+                () => guild.emojis.delete(emojiID),
+                () => {
+                    length--;
+                }
+            );
+            
         }
         return length;
     }

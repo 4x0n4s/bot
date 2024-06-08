@@ -4,8 +4,8 @@ import Emitter from 'events';
 import * as fs from 'fs-extra';
 
 export default class Manager extends Emitter {
-    commands = new Storage<KeyTypes, Command>();
-    events = new Storage<KeyTypes, Event>();
+    commands = new Map<string, Command>();
+    events = new Map<string, Event>();
     constructor () { 
         super();
     }
@@ -19,13 +19,13 @@ export default class Manager extends Emitter {
     }
     
     getCommands() {
-        return [...this.commands];
+        return [...this.commands.values()];
     }
 
     findCommand(commandName: string, args: string[]) {
         let command = this.commands.get(commandName);
         const commandArgs = args.join(' ');
-        if(!command) command = this.commands.find(command => commandArgs.includes(command.name))?.[1];
+        if(!command) command = this.getCommands().find(command => commandArgs.includes(command.name));
         return command;
     }
 

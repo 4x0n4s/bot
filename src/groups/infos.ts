@@ -41,7 +41,7 @@ export default class {
 
         let page = 0;
         const lists = ['Moderation', 'Protection', 'Utilities', 'Logs', 'Economy', 'Test'] as ListsData[];
-        const commands = Main.manager.commands.all();
+        const commands = Main.manager.getCommands();
     
         function Embed(list: string) {
             return {

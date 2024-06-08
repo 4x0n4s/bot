@@ -21,13 +21,15 @@ export default class Message {
         this._client = client;
         this.ID = data.id;
         this.content = data.content;
+        this.channel = new TextChannel(client, '' as any);
         this.channelID = data.channel_id;
+        this.creator = new User(data.author);
         this.guildID = data.guild_id;
-        this.guild = client.guilds.get(data.guild_id) ?? null;
-        this.creator = new User(client, data.author);
-        this.member = this.guild?.members.get(data.author.id) ?? null;
-        this.channel = new TextChannel(client, '' as any)
-        this.reactions = data.reactions?.map(reaction => new Reaction(client, reaction)) ?? [];
+        let guildData = client.guilds.get(data.guild_id as string)[0];
+        this.guild = guildData ? new Guild(client, guildData) : null;
+        let memberData = this.guild?.members.get(this.creator.ID)[0];
+        this.member = memberData ? new Member(memberData) : null;
+        this.reactions = data.reactions?.map(reaction => new Reaction(reaction)) ?? [];
     }
     
     async addReactions(emojis: Emoji | Emoji[] | StandardEmoji | StandardEmoji[]) {
@@ -55,17 +57,13 @@ export default class Message {
         return JSON.stringify({
             ID: this.ID,
             content: this.content,
-            guild: this.guild.toJSON(),
-            creator: this.creator.toJSON(),
-            member: this.member.toJSON(),
+            guild: this.guild?.toJSON(),
+            creator: this.creator?.toJSON(),
+            member: this.member?.toJSON(),
             channel: this.channel.toJSON(),
             channelID: this.channelID,
             guildID: this.guildID,
             reactions: JSON.stringify(this.reactions.map(reaction => reaction.toJSON()))
         });
-    }
-
-    static fromJSON(client: Client, data: RawAPIMessage) {
-        return new Message(client, data);
     }
 }

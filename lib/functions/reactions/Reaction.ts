@@ -8,10 +8,9 @@ export default class Reaction {
     }
 
     toJSON() {
-        return JSON.stringify(this);
+        return JSON.stringify(this.data);
     }
 
-    static fromJSON(data: APIReaction) {
-        return new Reaction(data);
-    }
+
+ 
 }

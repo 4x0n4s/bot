@@ -15,7 +15,6 @@ export default class {
     })
     async create_emoji(message: Message, args: { emojis: string[] }, translate: (t: string) => string) {
         let { emojis } = args;
-        console.log(emojis)
         
         if(emojis.length === 0) {
             message.reply('0 emojis');
