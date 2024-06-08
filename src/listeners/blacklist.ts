@@ -6,7 +6,7 @@ export default class {
     @Event('guildBanRemove')
     async exec(ban: GuildBan) {
         const { guild, user } = ban;
-        let blacklist = this.getBlacklist();
+        const blacklist = this.getBlacklist();
         const isBlacklisted = blacklist
             .map(bl => bl.userID)
             .includes(user.id);

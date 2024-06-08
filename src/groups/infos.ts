@@ -1,8 +1,7 @@
-import { Message, ActionRowData, MessageActionRowComponentData, User, ComponentType } from 'discord.js';
-import type { APIEmbed } from 'discord-api-types/v10';
+import { APIEmbed, APIMessageActionRowComponent, APIActionRowComponent} from 'discord-api-types/v10';
+import { Command } from '@decorators';
 import { defaultColor, defaultPrefix } from 'lib/Constants';
-import { Command } from 'lib/decorators';
-import { ListsData } from '@typings';
+import { Message, User, ComponentType } from 'discord.js';
 
 export default class {
     /*
@@ -26,21 +25,19 @@ export default class {
         if (commandName) {
             let command = Main.manager.commands.get(commandName);
             if(command) {
-                message.reply({ 
-                    embeds: [{
-                        ...embed,
-                        title: command.name,
-                        fields: command.description
-                            .map(description => ({ name: `\`\`${defaultPrefix + description[0]}\`\``, value: description[1] })),
-                        footer: { text: `${command.name} - ${command.list}` },
-                    }]
-                });
+                message.reply({ embeds: [{
+                    ...embed,
+                    title: command.name,
+                    fields: command.description.map(([key, value]) => ({ name: `\`\`${defaultPrefix + key}\`\``, value: value })),
+                    footer: { text: `${command.name} - ${command.list}` },
+                    timestamp: new Date().toISOString()
+                }] });
                 return;
             }
         }
 
         let page = 0;
-        const lists = ['Moderation', 'Protection', 'Utilities', 'Logs', 'Economy', 'Test'] as ListsData[];
+        const lists = ['Moderation', 'Protection', 'Utilities', 'Information', 'Permissions', 'Radios', 'Logs', 'Economy'];
         const commands = Main.manager.getCommands();
     
         function Embed(list: string) {
@@ -53,14 +50,15 @@ export default class {
                     .flatMap(descriptions => descriptions)
                     .map(description => ({ name: `\`\`${defaultPrefix + description[0]}\`\``, value: description[1] })),
                 footer: { text: `${list} - ${commands?.length}` },
+                timestamp: new Date().toISOString()
             } as APIEmbed;
         }
      
-        const components: ActionRowData<MessageActionRowComponentData>[] = [{
+        const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [{
             type: 1,
             components: [{
                 type: 3,
-                customId: 'help',
+                custom_id: 'help',
                 options: lists.map(list => ({ label: list, value: list }))
             }],
         }];
@@ -69,12 +67,13 @@ export default class {
         m.createMessageComponentCollector({
             componentType: ComponentType.StringSelect,
             time: 60000,
-            filter: (interaction) => interaction.user.id === message.author.id && interaction.customId === 'help'
-        }).on('collect', interaction => {
+            filter: ({ user, customId }) => user.id === message.author.id && customId === 'help'
+        }).on('collect', (interaction) => {
             interaction.deferUpdate();
-            const list = lists.find(list => list === interaction.values[0]) as string;
-            m.edit({ embeds: [Embed(list)] });
-        }).on('end', () => m.edit({ components: [] }));
+            m.edit({ embeds: [Embed(lists.find(list => list === interaction.values[0]) ?? 'Moderation')] });
+        }).on('end', () => {
+            m.edit({ components: [] });
+        });
     }
 
     @Command({
@@ -103,7 +102,8 @@ export default class {
             image: { 
                 url: user.bannerURL({ extension: 'png' }) as string
             },
-            color: defaultColor
+            color: defaultColor,
+            timestamp: new Date().toISOString()
         }
 
         message.reply({
@@ -133,7 +133,8 @@ export default class {
             image: { 
                 url: user.avatarURL({ extension: 'png' }) as string
             },
-            color: defaultColor
+            color: defaultColor,
+            timestamp: new Date().toISOString()
         }];
 
         message.reply({ embeds });

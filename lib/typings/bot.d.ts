@@ -58,11 +58,12 @@ export enum CommandArgumentsTypes {
 }
 
 export type ListsData = 
-    | 'Test'
     | 'Moderation'
     | 'Protection'
     | 'Utilities'
     | 'Information'
+    | 'Permissions'
+    | 'Radios'
     | 'Logs'
     | 'Economy'
 

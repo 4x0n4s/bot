@@ -51,7 +51,6 @@ export default class {
             DO UPDATE SET logsID = excluded.logsID;
         `).run(message.guild?.id as string, channel.id);
 
-        message.reply(translate('setStarBoardsChannel')
-            .replaceAll('#channel', `${channel}`));
+        message.reply(translate('setStarBoardsChannel').replaceAll('$channel', `${channel}`));
     }
 }   

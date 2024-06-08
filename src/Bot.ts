@@ -5,13 +5,12 @@ import DatabaseClient from 'src/Database';
 import { Intents } from 'lib/Constants';
 
 export default class Bot extends Client {
-    constructor (private botOptions: BotOptions) {
+    constructor ({ token }: BotOptions) {
         super({
             intents: Intents.All
         });
-        let { token } = botOptions;
-        this.manager = new Manager();
         this.login(token);
+        this.manager = new Manager();
         this.manager.load();
         this.on('ready', async () => {
             console.log('Logged');

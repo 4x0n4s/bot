@@ -14,30 +14,27 @@ export default class {
         
         let args = content.trim().slice(defaultPrefix.length).split(' ');
         const commandName = args[0].toLocaleLowerCase();
-
         let c: Command | undefined;
-        if(commandName) c = Main.manager.findCommand(commandName, args);
-        if(!c) return;
-
+        if(commandName) c = Main.manager.findCommand(args);
+        if (!c) return;
+    
         let bypass: boolean = false;
 
-        let query = databaseClient.query(`
+        const query = databaseClient.query(`
             SELECT * FROM permissions WHERE guildID = ? AND commandIdentifier = ?;
         `).get(guild.id, c.name) as PermissionsData | null;
 
         if(!query) bypass = true;
         else {
             let { roleID, userID } = query;
-            if(member?.roles.cache.has(roleID) ?? author.id === userID) bypass = true;
+            if (member?.roles.cache.has(roleID) ?? author.id === userID) bypass = true
+            else return;
         }
-
-        if(!bypass) return;
 
         args = args.slice(c.name.split(' ').length);
         const commandArgs = this.parseArguments(c, message, args);
 
-        let lang = yml.parse(fs.readFileSync(`./langs/${defaultLang}.yml`, { encoding: 'utf-8' })) as Translations;
-            
+        const lang = yml.parse(fs.readFileSync(`./langs/${defaultLang}.yml`, { encoding: 'utf-8' })) as Translations;
         function translate(t: string): string {
             lang[t] = lang[t]
                 .replace('#guild', (_, key) => { return (message.guild as any)[key] || _ })

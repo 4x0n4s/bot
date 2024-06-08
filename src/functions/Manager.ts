@@ -22,10 +22,9 @@ export default class Manager extends Emitter {
         return [...this.commands.values()];
     }
 
-    findCommand(commandName: string, args: string[]) {
-        let command = this.commands.get(commandName);
+    findCommand(args: string[]) {
         const commandArgs = args.join(' ');
-        if(!command) command = this.getCommands().find(command => commandArgs.includes(command.name));
+        let command = this.getCommands().sort((a, b) => b.name.length - a.name.length).find(command => commandArgs.includes(command.name));
         return command;
     }
 

@@ -16,10 +16,6 @@ export default class {
     clear(message: Message, args: { number: number }, translate: (t: string) => string) {
         const { channel } = message;
         const { number } = args;
-
-        if(channel instanceof TextChannel) {
-            channel.bulkDelete(number + 1);
-        }
         
     } 
 
@@ -42,8 +38,7 @@ export default class {
             RETURNING *;
         `).all(member.id).length;
 
-        message.reply(translate('clearSanctionsMessage')
-                .replace('$length', length.toString()));
+        message.reply(translate('clearSanctionsMessage').replace('$length', length.toString()));
     }
 
     @Command({
@@ -109,7 +104,7 @@ export default class {
         description: [['delete sanction <member> <warnID>', 'Remove sanction']],
         list: 'Moderation'
     })
-    delete_sanction(message: Message, args: { member: GuildMember, warnID: number }, translate: (t: string) => string) {
+    delete_sanction_command(message: Message, args: { member: GuildMember, warnID: number }, translate: (t: string) => string) {
         let { member, warnID } = args;
         
         if(!member) {

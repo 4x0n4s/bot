@@ -25,12 +25,12 @@ export default class {
         `).get(guild?.id, channel.id, message.id) as StarBoardsData;
 
         const logs = guild.channels.cache.get(logsID) as TextChannel;
-        const e = reactions.cache.get('⭐')?.count;
+        const count = reactions.cache.get('⭐')?.count;
 
         if(!starboard) {
             const url = `https://discord.com/channels/${guild.id}/${channel.id}/${message.id}`;
             const m = await logs.send({
-                content: `${e} ⭐ <#${channel.id}>`,
+                content: `${count} ⭐ <#${channel.id}>`,
                 embeds: [{
                     author: { name: user.username, icon_url: user.avatarURL() as string, url },
                     fields: [{ name: 'Message', value: `[Redirection](${url})`}],
@@ -49,9 +49,7 @@ export default class {
         const m = messages.get(targetID);
 
         if(Boolean(m)) {
-            m?.edit({
-                content: `${e} ⭐ <#${channelID}>`
-            });
+            m?.edit({ content: `${count} ⭐ <#${channelID}>`});
         } else {
             databaseClient.query(`
                 DELETE FROM starboards WHERE guildID = ? AND channelID = ? AND messageID = ?;

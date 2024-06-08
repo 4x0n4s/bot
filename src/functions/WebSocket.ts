@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 
 export default class extends WebSocket {
     constructor() {
-        super('ws://localhost:1337');
+        super('wss://localhost:1337');
         super.on('open', () => {
             console.log('[WebSocket]: Gateway..')
         }).on('message', async (message: string) => {
