@@ -17,11 +17,6 @@ export default class {
     async help_command(message: Message, args: { commandName: string }) {
         let { commandName } = args;
         
-        let embed: APIEmbed = {
-            author: { name: message.author.username, icon_url: message.author?.avatarURL() ?? undefined },
-            color: defaultColor     
-        };
-        
         if (commandName) {
             let command = Main.manager.commands.get(commandName);
             if(command) {
