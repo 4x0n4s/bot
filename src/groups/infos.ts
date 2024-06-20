@@ -25,14 +25,8 @@ export default class {
         if (commandName) {
             let command = Main.manager.commands.get(commandName);
             if(command) {
-                message.reply({ embeds: [{
-                    ...embed,
-                    title: command.name,
-                    fields: command.description.map(([key, value]) => ({ name: `\`\`${defaultPrefix + key}\`\``, value: value })),
-                    footer: { text: `${command.name} - ${command.list}` },
-                    timestamp: new Date().toISOString()
-                }] });
-                return;
+                message.reply({ embeds: [Embed(command.name)] });
+                return
             }
         }
 
@@ -40,13 +34,13 @@ export default class {
         const lists = ['Moderation', 'Protection', 'Utilities', 'Information', 'Permissions', 'Radios', 'Logs', 'Economy'];
         const commands = Main.manager.getCommands();
     
-        function Embed(list: string) {
+        function Embed(x: string) {
             return {
-                ...embed,
-                title: list,
+                author: { name: message.author.username, icon_url: message.author?.avatarURL() ?? undefined },
+                color: defaultColor,
+                title: x,
                 fields: commands
-                    ?.filter(command => command.list === list)
-                    .map(command => command.description)
+                    ?.filter(({ list, name }) => list === x ?? name === x)
                     .flatMap(descriptions => descriptions)
                     .map(description => ({ name: `\`\`${defaultPrefix + description[0]}\`\``, value: description[1] })),
                 footer: { text: `${list} - ${commands?.length}` },
