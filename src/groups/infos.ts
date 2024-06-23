@@ -36,7 +36,7 @@ export default class {
                 title: x,
                 fields: commands
                     ?.filter(({ list, name }) => list === x ?? name === x)
-                    .flatMap(descriptions => descriptions)
+                    .flatMap(({ descriptions }) => descriptions)
                     .map(description => ({ name: `\`\`${defaultPrefix + description[0]}\`\``, value: description[1] })),
                 footer: { text: `${list} - ${commands?.length}` },
                 timestamp: new Date().toISOString()
